@@ -136,12 +136,25 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   cursor:pointer;
 }
 
+/* GAME LIST – SCROLLABLE */
 .gameList{
   max-height:180px;
-  overflow:auto;
+  overflow-y:auto;
   display:grid;
   gap:6px;
   margin-bottom:10px;
+  padding-right:4px;
+}
+
+.gameList::-webkit-scrollbar{
+  width:6px;
+}
+.gameList::-webkit-scrollbar-thumb{
+  background:var(--blue2);
+  border-radius:4px;
+}
+.gameList::-webkit-scrollbar-track{
+  background:#07112a;
 }
 
 .gameBtn{
@@ -170,6 +183,51 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   color:#e5f3ff;
   margin-bottom:6px;
   font-weight:700;
+}
+
+/* CALCULATOR */
+.calc{
+  border:1px dashed var(--border);
+  border-radius:10px;
+  padding:8px;
+  margin-bottom:8px;
+}
+
+.calcTitle{
+  font-size:12px;
+  font-weight:900;
+  color:var(--blue);
+  margin-bottom:4px;
+  text-align:center;
+}
+
+.calcRow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.calcTotal{
+  text-align:center;
+  font-weight:900;
+  margin:6px 0;
+  color:var(--blue2);
+}
+
+.calcButtons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.calcButtons button{
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  background:var(--blue2);
+  font-weight:900;
+  cursor:pointer;
+  color:#020617;
 }
 
 .admin button.save{
@@ -216,6 +274,7 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
     </div>
   </div>
 
+  <!-- ADMIN -->
   <div class="admin" id="adminPanel">
     <div class="adminHeader">
       <h3>ADMIN PANEL</h3>
@@ -224,10 +283,22 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
     <div class="gameList" id="gameList"></div>
 
+    <!-- CALCULATOR -->
+    <div class="calc">
+      <div class="calcTitle">2-BUY CALCULATOR</div>
+      <div class="calcRow">
+        <input id="buy1" type="number" placeholder="Buy 1 €">
+        <input id="buy2" type="number" placeholder="Buy 2 €">
+      </div>
+      <div class="calcTotal">Total: €<span id="calcTotal">0</span></div>
+      <div class="calcButtons">
+        <button onclick="applyTotal(1)">Apply to P1</button>
+        <button onclick="applyTotal(2)">Apply to P2</button>
+      </div>
+    </div>
+
     <input id="p1Input" placeholder="Player 1 name">
-    <input id="p1ScoreInput" placeholder="Player 1 score" type="number">
     <input id="p2Input" placeholder="Player 2 name">
-    <input id="p2ScoreInput" placeholder="Player 2 score" type="number">
 
     <button class="save" id="saveMatch">Save Match</button>
   </div>
@@ -247,11 +318,7 @@ const gameList=document.getElementById('gameList');
 const adminPanel=document.getElementById('adminPanel');
 
 function renderGame(game){
-  activeSlot.innerHTML=`
-    <div class="slot">
-      <img src="${game.img}">
-      <div class="slot-name">🎰 ${game.name}</div>
-    </div>`;
+  activeSlot.innerHTML=`<div class="slot"><img src="${game.img}"><div class="slot-name">🎰 ${game.name}</div></div>`;
   localStorage.setItem('activeGame',JSON.stringify(game));
 }
 
@@ -268,40 +335,30 @@ function renderGameList(){
 }
 
 document.getElementById('saveMatch').onclick=()=>{
-  const p1=document.getElementById('p1Input').value||p1Name.textContent;
-  const p2=document.getElementById('p2Input').value||p2Name.textContent;
-  const s1=document.getElementById('p1ScoreInput').value||p1Score.textContent.replace('€','');
-  const s2=document.getElementById('p2ScoreInput').value||p2Score.textContent.replace('€','');
-
-  p1Name.textContent=p1;
-  p2Name.textContent=p2;
-  p1Score.textContent='€'+s1;
-  p2Score.textContent='€'+s2;
-
-  localStorage.setItem('match',JSON.stringify({p1,p2,s1,s2}));
+  p1Name.textContent=document.getElementById('p1Input').value||p1Name.textContent;
+  p2Name.textContent=document.getElementById('p2Input').value||p2Name.textContent;
 };
 
-function loadMatch(){
-  const m=JSON.parse(localStorage.getItem('match'));
-  if(!m) return;
-  p1Name.textContent=m.p1;
-  p2Name.textContent=m.p2;
-  p1Score.textContent='€'+m.s1;
-  p2Score.textContent='€'+m.s2;
+function updateCalc(){
+  const t=(+buy1.value||0)+(+buy2.value||0);
+  document.getElementById('calcTotal').textContent=t;
+}
+buy1.oninput=updateCalc;
+buy2.oninput=updateCalc;
+
+function applyTotal(p){
+  const t=document.getElementById('calcTotal').textContent;
+  if(p===1) p1Score.textContent='€'+t;
+  if(p===2) p2Score.textContent='€'+t;
 }
 
 document.getElementById('adminToggle').onclick=()=>adminPanel.style.display='block';
 document.getElementById('closeAdmin').onclick=()=>adminPanel.style.display='none';
-document.addEventListener('keydown',e=>e.key==='Escape'&&(adminPanel.style.display='none'));
-document.addEventListener('click',e=>{
-  if(adminPanel.style.display==='block'&&!adminPanel.contains(e.target)&&!e.target.classList.contains('adminToggle'))
-    adminPanel.style.display='none';
-});
 
 renderGame(JSON.parse(localStorage.getItem('activeGame'))||games[0]);
 renderGameList();
-loadMatch();
 </script>
 
 </body>
 </html>
+
