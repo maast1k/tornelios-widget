@@ -3,50 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blue Slot Tournament Widget</title>
+  <title>TORNELIOS Widget</title>
 
   <style>
-    :root {
-      --blue-900: #020617;
-      --blue-800: #020f2e;
-      --blue-700: #032e6b;
-      --blue-500: #0ea5ff;
-      --blue-400: #38bdf8;
-      --glow: rgba(56, 189, 248, 0.6);
+    :root{
+      --blue-900:#020617;
+      --blue-800:#020f2e;
+      --blue-700:#032e6b;
+      --blue-500:#0ea5ff;
+      --blue-400:#38bdf8;
+      --glow:rgba(56,189,248,.6);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:transparent;font-family:Inter,system-ui,-apple-system,sans-serif}
+
+    .widget{
+      width:420px;
+      position:relative;
+      background:linear-gradient(180deg,var(--blue-800),var(--blue-900));
+      border-radius:18px;
+      border:1px solid rgba(56,189,248,.25);
+      box-shadow:0 0 40px rgba(14,165,255,.25);
+      color:#e5f3ff;
+      overflow:hidden;
+      animation:pulse 4s infinite;
     }
 
-    * { box-sizing: border-box; }
-    body { margin:0; background:transparent; font-family:Inter, system-ui, -apple-system, sans-serif; }
-    .widget { width:420px; background:linear-gradient(180deg,var(--blue-800),var(--blue-900)); border-radius:18px; border:1px solid rgba(56,189,248,0.25); box-shadow:0 0 40px rgba(14,165,255,0.25); color:#e5f3ff; overflow:hidden; animation:pulse 4s infinite; }
-    .header { padding:16px; background:linear-gradient(90deg,var(--blue-700),var(--blue-500)); text-align:center; font-weight:800; letter-spacing:0.5px; text-shadow:0 0 12px var(--glow); }
-    .timer { text-align:center; padding:10px; font-size:14px; opacity:0.9; }
-    .slots { display:grid; grid-template-columns:1fr; gap:10px; padding:14px; }
-    .slot { background:radial-gradient(circle at top,#061a3a,#020617); border-radius:12px; padding:8px; border:1px solid rgba(56,189,248,0.2); box-shadow:inset 0 0 20px rgba(14,165,255,0.15); text-align:center; }
-    .slot img { width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:6px; filter:saturate(1.2); }
-    .slot-name { font-size:12px; opacity:0.85; font-weight:700; }
-    .leaderboard { padding:16px; border-top:1px solid rgba(56,189,248,0.15); }
-    .versus { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; }
-    .fighter { background:radial-gradient(circle at top,#061a3a,#020617); border-radius:14px; padding:14px; text-align:center; border:1px solid rgba(56,189,248,0.25); box-shadow:inset 0 0 25px rgba(14,165,255,0.2); }
-    .fighter .name { font-weight:700; font-size:13px; margin-bottom:6px; }
-    .fighter .score { font-size:20px; font-weight:800; color:var(--blue-400); text-shadow:0 0 10px var(--glow); }
-    .vs { font-weight:900; font-size:16px; color:var(--blue-500); text-shadow:0 0 12px var(--glow); }
-    .leaderboard h3 { margin:0 0 8px; font-size:14px; text-align:center; color:var(--blue-400); }
-    .footer { text-align:center; font-size:10px; padding:8px; opacity:0.5; }
-    @keyframes pulse { 0% { box-shadow:0 0 20px rgba(14,165,255,0.25); } 50% { box-shadow:0 0 35px rgba(14,165,255,0.55); } 100% { box-shadow:0 0 20px rgba(14,165,255,0.25); } }
-    .admin input, .admin button { font-family:Inter, sans-serif; }
+    .header{
+      padding:16px;
+      background:linear-gradient(90deg,var(--blue-700),var(--blue-500));
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.6px;
+      text-shadow:0 0 12px var(--glow);
+    }
+
+    .timerRow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:10px;
+      font-size:14px;
+      opacity:.95;
+    }
+
+    .adminToggle{
+      padding:4px 10px;
+      border-radius:10px;
+      border:1px solid rgba(56,189,248,.25);
+      background:rgba(2,15,46,.7);
+      color:var(--blue-400);
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .slots{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      padding:14px;
+      max-height:520px;
+      overflow:auto;
+    }
+
+    .slot{
+      background:radial-gradient(circle at top,#061a3a,#020617);
+      border-radius:12px;
+      padding:8px;
+      border:1px solid rgba(56,189,248,.2);
+      box-shadow:inset 0 0 20px rgba(14,165,255,.15);
+      text-align:center;
+    }
+    .slot img{
+      width:100%;
+      height:120px;
+      object-fit:cover;
+      border-radius:8px;
+      margin-bottom:6px;
+      filter:saturate(1.2);
+    }
+    .slot-name{font-size:12px;opacity:.9;font-weight:800}
+
+    .leaderboard{
+      padding:16px;
+      border-top:1px solid rgba(56,189,248,.15);
+    }
+    .leaderboard h3{
+      margin:0 0 8px;
+      font-size:14px;
+      text-align:center;
+      color:var(--blue-400);
+    }
+    .versus{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+    }
+    .fighter{
+      background:radial-gradient(circle at top,#061a3a,#020617);
+      border-radius:14px;
+      padding:14px;
+      text-align:center;
+      border:1px solid rgba(56,189,248,.25);
+      box-shadow:inset 0 0 25px rgba(14,165,255,.2);
+    }
+    .fighter .name{font-weight:900;font-size:13px;margin-bottom:6px}
+    .fighter .score{
+      font-size:20px;
+      font-weight:1000;
+      color:var(--blue-400);
+      text-shadow:0 0 10px var(--glow);
+    }
+    .vs{font-weight:1000;font-size:16px;color:var(--blue-500);text-shadow:0 0 12px var(--glow)}
+
+    .footer{text-align:center;font-size:10px;padding:8px;opacity:.55}
+
+    /* ADMIN OVERLAY (always visible, OBS-safe) */
+    .adminOverlay{
+      display:none;
+      position:absolute;
+      top:56px;
+      left:10px;
+      right:10px;
+      z-index:9999;
+      background:rgba(2,6,23,.98);
+      border:1px solid rgba(56,189,248,.28);
+      border-radius:14px;
+      box-shadow:0 0 30px rgba(14,165,255,.25);
+      padding:12px;
+      backdrop-filter: blur(6px);
+    }
+
+    .adminTitle{
+      margin:0 0 10px;
+      font-size:13px;
+      color:var(--blue-400);
+      font-weight:1000;
+      text-align:center;
+    }
+
+    .adminGrid{
+      display:grid;
+      gap:8px;
+    }
+
+    .adminOverlay input{
+      width:100%;
+      padding:9px 10px;
+      border-radius:10px;
+      border:1px solid rgba(56,189,248,.18);
+      background:#07112a;
+      color:#e5f3ff;
+      outline:none;
+      font-weight:700;
+    }
+
+    .adminOverlay button{
+      width:100%;
+      padding:10px;
+      border-radius:12px;
+      background:var(--blue-500);
+      border:none;
+      font-weight:1000;
+      cursor:pointer;
+      color:#06112a;
+    }
+
+    .adminRow2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .adminActions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:6px;
+    }
+
+    .btnGhost{
+      background:rgba(2,15,46,.7) !important;
+      border:1px solid rgba(56,189,248,.25) !important;
+      color:var(--blue-400) !important;
+    }
+
+    @keyframes pulse{
+      0%{box-shadow:0 0 20px rgba(14,165,255,.25)}
+      50%{box-shadow:0 0 35px rgba(14,165,255,.55)}
+      100%{box-shadow:0 0 20px rgba(14,165,255,.25)}
+    }
   </style>
 </head>
 <body>
 
-<div class="widget">
+<div class="widget" id="widget">
   <div class="header">TORNELIOS</div>
-  <div class="timer">⏱ Time Remaining: <span id="time">29:59</span>
-    <button id="adminToggle" style="margin-left:10px; padding:4px 10px; border-radius:8px; border:1px solid rgba(56,189,248,0.25); background:rgba(2,15,46,0.7); color:#38bdf8; font-weight:800; cursor:pointer">⚙ Admin</button>
+
+  <div class="timerRow">
+    <div>⏱ Time Remaining: <span id="time">29:59</span></div>
+    <button class="adminToggle" id="adminToggle">⚙ Admin</button>
   </div>
 
-  <div class="slots" id="gameSlots">
-    <!-- Games will appear here -->
-  </div>
+  <div class="slots" id="gameSlots"></div>
 
   <div class="leaderboard">
     <h3>⚔️ 1v1 MATCH</h3>
@@ -65,94 +226,126 @@
 
   <div class="footer">Twitch Slot Tournament Widget</div>
 
-  <div class="admin" id="adminPanel" style="display:none; padding:14px; border-top:1px solid rgba(56,189,248,0.2)">
-    <h3 style="margin:0 0 10px; font-size:14px; color:#38bdf8; text-align:center">ADMIN PANEL</h3>
-    <input id="slotName" placeholder="Game Name" style="width:100%; padding:8px; margin-bottom:6px; border-radius:8px; border:none" />
-    <input id="slotImage" placeholder="Image URL" style="width:100%; padding:8px; margin-bottom:10px; border-radius:8px; border:none" />
-    <button onclick="addGame()" style="width:100%; padding:10px; border-radius:10px; background:#0ea5ff; border:none; font-weight:700; margin-bottom:10px">Add Game</button>
-    <input id="p1Name" placeholder="Player 1 name" style="width:100%; padding:8px; margin-bottom:6px; border-radius:8px; border:none" />
-    <input id="p1Score" placeholder="Player 1 score" type="number" style="width:100%; padding:8px; margin-bottom:10px; border-radius:8px; border:none" />
-    <input id="p2Name" placeholder="Player 2 name" style="width:100%; padding:8px; margin-bottom:6px; border-radius:8px; border:none" />
-    <input id="p2Score" placeholder="Player 2 score" type="number" style="width:100%; padding:8px; margin-bottom:10px; border-radius:8px; border:none" />
-    <button onclick="update1v1()" style="width:100%; padding:10px; border-radius:10px; background:#0ea5ff; border:none; font-weight:700">Update Match</button>
+  <!-- ADMIN OVERLAY -->
+  <div class="adminOverlay" id="adminPanel">
+    <div class="adminTitle">ADMIN PANEL</div>
+
+    <div class="adminGrid">
+      <input id="slotName" placeholder="Game Name" />
+      <input id="slotImage" placeholder="Image URL" />
+      <button id="addGameBtn">Add Game</button>
+
+      <div class="adminRow2">
+        <input id="p1Name" placeholder="Player 1 name" />
+        <input id="p1Score" placeholder="Player 1 score" type="number" />
+      </div>
+
+      <div class="adminRow2">
+        <input id="p2Name" placeholder="Player 2 name" />
+        <input id="p2Score" placeholder="Player 2 score" type="number" />
+      </div>
+
+      <button id="updateMatchBtn">Update Match</button>
+
+      <div class="adminActions">
+        <button class="btnGhost" id="clearGamesBtn">Clear Games</button>
+        <button class="btnGhost" id="resetTimerBtn">Reset Timer</button>
+      </div>
+
+      <button class="btnGhost" id="closeAdminBtn">Close Admin</button>
+    </div>
   </div>
 </div>
 
 <script>
-  let seconds = Number(localStorage.getItem('timer')) || 1800;
-  const el = document.getElementById('time');
+  // ---------- TIMER (auto-saves) ----------
+  const DEFAULT_SECONDS = 1800;
+  let seconds = Number(localStorage.getItem('timer')) || DEFAULT_SECONDS;
+  const timeEl = document.getElementById('time');
+
+  function renderTime(){
+    const m = String(Math.floor(seconds / 60)).padStart(2,'0');
+    const s = String(seconds % 60).padStart(2,'0');
+    timeEl.textContent = `${m}:${s}`;
+  }
+  renderTime();
 
   setInterval(() => {
     if (seconds <= 0) return;
     seconds--;
-    localStorage.setItem('timer', seconds);
-    const m = String(Math.floor(seconds / 60)).padStart(2,'0');
-    const s = String(seconds % 60).padStart(2,'0');
-    el.textContent = `${m}:${s}`;
-  },1000);
+    localStorage.setItem('timer', String(seconds));
+    renderTime();
+  }, 1000);
 
+  // ---------- ADMIN TOGGLE ----------
   const adminPanel = document.getElementById('adminPanel');
+  const adminToggle = document.getElementById('adminToggle');
+
+  function toggleAdmin(force){
+    const shouldOpen = (typeof force === 'boolean') ? force : (adminPanel.style.display !== 'block');
+    adminPanel.style.display = shouldOpen ? 'block' : 'none';
+  }
+
+  adminToggle.addEventListener('click', () => toggleAdmin());
+  document.getElementById('closeAdminBtn').addEventListener('click', () => toggleAdmin(false));
+
+  // Optional key toggle (still works if focused)
+  document.addEventListener('keydown', (e) => {
+    if(e.key.toLowerCase() === 'a') toggleAdmin();
+    if(e.key === 'Escape') toggleAdmin(false);
+  });
+
+  // ---------- GAMES (auto-saves) ----------
   const gameSlots = document.getElementById('gameSlots');
-
-  // Toggle admin panel (button + optional key)
-  document.getElementById('adminToggle').addEventListener('click',()=>{
-    adminPanel.style.display = adminPanel.style.display==='none'?'block':'none';
-  });
-
-  document.addEventListener('keydown',(e)=>{
-    if(e.key.toLowerCase()==='a'){
-      adminPanel.style.display = adminPanel.style.display==='none'?'block':'none';
-    }
-  });
 
   function saveGames(){
     const games = [];
-    document.querySelectorAll('.slot').forEach(slot=>{
-      games.push({
-        name: slot.querySelector('.slot-name').textContent.replace('🎰 ','').trim(),
-        img: slot.querySelector('img').src
-      });
+    document.querySelectorAll('.slot').forEach(slot => {
+      const name = slot.querySelector('.slot-name').textContent.replace('🎰','').trim();
+      const img = slot.querySelector('img').src;
+      games.push({ name, img });
     });
     localStorage.setItem('games', JSON.stringify(games));
   }
 
-  function loadGames(){
-    const games = JSON.parse(localStorage.getItem('games') || '[]');
-    games.forEach(g=>addGame(g.name, g.img, false));
-  }
-
-  function addGame(nameInput, imgInput, save=true){
-    const name = nameInput || document.getElementById('slotName').value;
-    const img = imgInput || document.getElementById('slotImage').value;
+  function addGame(nameInput, imgInput, shouldSave=true){
+    const name = nameInput || document.getElementById('slotName').value.trim();
+    const img = imgInput || document.getElementById('slotImage').value.trim();
     if(!name || !img) return;
 
     const div = document.createElement('div');
     div.className = 'slot';
-    div.innerHTML = `<img src='${img}'/><div class='slot-name'>🎰 ${name}</div>`;
+    div.innerHTML = `<img src="${img}" /><div class="slot-name">🎰 ${name}</div>`;
     gameSlots.appendChild(div);
 
-    if(save) saveGames();
+    if(shouldSave) saveGames();
 
-    document.getElementById('slotName').value='';
-    document.getElementById('slotImage').value='';
+    if(!nameInput){
+      document.getElementById('slotName').value = '';
+      document.getElementById('slotImage').value = '';
+    }
   }
 
-  function update1v1(){
-    const p1Name = document.getElementById('p1Name').value || document.querySelector('#p1 .name').textContent;
-    const p1Score = document.getElementById('p1Score').value || document.getElementById('p1ScoreDisplay').textContent.replace('€','');
-    const p2Name = document.getElementById('p2Name').value || document.querySelector('#p2 .name').textContent;
-    const p2Score = document.getElementById('p2Score').value || document.getElementById('p2ScoreDisplay').textContent.replace('€','');
+  function loadGames(){
+    const games = JSON.parse(localStorage.getItem('games') || '[]');
+    games.forEach(g => addGame(g.name, g.img, false));
+  }
 
-    document.querySelector('#p1 .name').textContent = p1Name;
-    document.getElementById('p1ScoreDisplay').textContent = `€${Number(p1Score).toLocaleString()}`;
-    document.querySelector('#p2 .name').textContent = p2Name;
-    document.getElementById('p2ScoreDisplay').textContent = `€${Number(p2Score).toLocaleString()}`;
+  document.getElementById('addGameBtn').addEventListener('click', () => addGame());
 
+  // Clear games
+  document.getElementById('clearGamesBtn').addEventListener('click', () => {
+    gameSlots.innerHTML = '';
+    localStorage.removeItem('games');
+  });
+
+  // ---------- MATCH (auto-saves) ----------
+  function saveMatch(p1Name, p1Score, p2Name, p2Score){
     localStorage.setItem('match', JSON.stringify({ p1Name, p1Score, p2Name, p2Score }));
   }
 
   function loadMatch(){
-    const m = JSON.parse(localStorage.getItem('match'));
+    const m = JSON.parse(localStorage.getItem('match') || 'null');
     if(!m) return;
     document.querySelector('#p1 .name').textContent = m.p1Name;
     document.getElementById('p1ScoreDisplay').textContent = `€${Number(m.p1Score).toLocaleString()}`;
@@ -160,16 +353,65 @@
     document.getElementById('p2ScoreDisplay').textContent = `€${Number(m.p2Score).toLocaleString()}`;
   }
 
-  loadGames();
+  function update1v1(){
+    const p1Name = (document.getElementById('p1Name').value.trim() || document.querySelector('#p1 .name').textContent);
+    const p2Name = (document.getElementById('p2Name').value.trim() || document.querySelector('#p2 .name').textContent);
 
-  if(!localStorage.getItem('games')){
+    const p1ScoreRaw = document.getElementById('p1Score').value;
+    const p2ScoreRaw = document.getElementById('p2Score').value;
+
+    const currentP1 = document.getElementById('p1ScoreDisplay').textContent.replace(/[€,]/g,'') || '0';
+    const currentP2 = document.getElementById('p2ScoreDisplay').textContent.replace(/[€,]/g,'') || '0';
+
+    const p1Score = (p1ScoreRaw !== '' ? Number(p1ScoreRaw) : Number(currentP1));
+    const p2Score = (p2ScoreRaw !== '' ? Number(p2ScoreRaw) : Number(currentP2));
+
+    document.querySelector('#p1 .name').textContent = p1Name;
+    document.getElementById('p1ScoreDisplay').textContent = `€${Number(p1Score).toLocaleString()}`;
+
+    document.querySelector('#p2 .name').textContent = p2Name;
+    document.getElementById('p2ScoreDisplay').textContent = `€${Number(p2Score).toLocaleString()}`;
+
+    saveMatch(p1Name, p1Score, p2Name, p2Score);
+
+    document.getElementById('p1Name').value = '';
+    document.getElementById('p2Name').value = '';
+    document.getElementById('p1Score').value = '';
+    document.getElementById('p2Score').value = '';
+  }
+
+  document.getElementById('updateMatchBtn').addEventListener('click', update1v1);
+
+  // Reset timer
+  document.getElementById('resetTimerBtn').addEventListener('click', () => {
+    seconds = DEFAULT_SECONDS;
+    localStorage.setItem('timer', String(seconds));
+    renderTime();
+  });
+
+  // ---------- PRELOAD HACKSAW NAMES (safe placeholders) ----------
+  function preloadHacksawOnce(){
+    if(localStorage.getItem('games')) return; // already saved
+
     const hacksawGames = [
-      'Rip City','Xmas Drop','Wanted Dead or a Wild','Le Bandit','Chaos Crew','Chaos Crew 2','Dork Unit','The Dog House Multihold','Stackem','Rotten','Cubes','Itero','The Bowery Boys','Keep'em','Hand of Anubis','Mystery Motel','Miami Multiplier','Outlaws Inc','The Respinners','Joker Bombs','Hop'n'Pop','Feel the Beat','Gladiator Legends','Stick 'Em','Forest Fortune','Cash Compass','The Rave','Release the Kraken','Tasty Treats','Rocket Reels','Buffalo Stack'n'Sync','Don't Eat the Candy','The Wolf Pack','Born Wild','Time Spinners','Alpha Eagle','Stormforged','Phoenix Duel','Warrior Ways','Shadow Strike'
+      "Rip City","Xmas Drop","Wanted Dead or a Wild","Le Bandit","Chaos Crew","Chaos Crew 2",
+      "Dork Unit","Stack 'Em","Cubes","Itero","Hand of Anubis","Mystery Motel","Miami Multiplier",
+      "Outlaws Inc","The Respinners","Joker Bombs","Hop'n'Pop","Feel the Beat","Gladiator Legends",
+      "Stick 'Em","Forest Fortune","Cash Compass","The Rave","Release the Kraken","Tasty Treats",
+      "Rocket Reels","Buffalo Stack'n'Sync","Don't Eat the Candy","The Wolf Pack","Born Wild",
+      "Time Spinners","Alpha Eagle","Stormforged","Phoenix Duel","Warrior Ways","Shadow Strike"
     ];
-    hacksawGames.forEach(name=>addGame(name,'https://via.placeholder.com/600x400/020f2e/38bdf8?text='+encodeURIComponent(name),false));
+
+    hacksawGames.forEach(name => {
+      const placeholder = "https://via.placeholder.com/600x400/020f2e/38bdf8?text=" + encodeURIComponent(name);
+      addGame(name, placeholder, false);
+    });
     saveGames();
   }
 
+  // Boot
+  preloadHacksawOnce();
+  loadGames();
   loadMatch();
 </script>
 
