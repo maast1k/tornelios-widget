@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TORNELIOS – CRAZY MODE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TORNELIOS Widget</title>
 
 <style>
 :root{
-  --blue:#38bdf8;
-  --blue2:#0ea5ff;
   --bg:#020617;
   --panel:#020f2e;
+  --blue:#38bdf8;
+  --blue2:#0ea5ff;
   --border:rgba(56,189,248,.25);
 }
+
 *{box-sizing:border-box}
 body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
@@ -22,87 +23,84 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   border-radius:18px;
   border:1px solid var(--border);
   color:#e5f3ff;
-  position:relative;
   overflow:hidden;
-  box-shadow:0 0 50px rgba(14,165,255,.35);
+  position:relative;
+  box-shadow:0 0 35px rgba(14,165,255,.25);
 }
 
-/* HEADER */
 .header{
   padding:16px;
   text-align:center;
-  font-weight:1000;
+  font-weight:900;
   background:linear-gradient(90deg,#032e6b,#0ea5ff);
-  text-shadow:0 0 14px rgba(56,189,248,.8);
+  text-shadow:0 0 10px rgba(56,189,248,.6);
 }
 
-/* ADMIN BUTTON */
 .topBar{
   display:flex;
   justify-content:center;
   padding:10px;
 }
+
 .adminToggle{
-  padding:6px 16px;
-  border-radius:12px;
+  padding:6px 14px;
+  border-radius:10px;
   background:#07112a;
   border:1px solid var(--border);
   color:var(--blue);
-  font-weight:1000;
+  font-weight:900;
   cursor:pointer;
 }
 
-/* SLOT */
 .slotWrap{padding:14px}
+
 .slot{
   background:#020617;
   border-radius:14px;
   padding:10px;
   border:1px solid var(--border);
   text-align:center;
-  animation:pulse 3s infinite;
+  animation:pulse 4s infinite;
 }
+
 .slot img{
   width:100%;
   height:130px;
   object-fit:contain;
-  background:#000;
   border-radius:10px;
+  background:#000;
 }
+
 .slot-name{
   font-weight:900;
   margin-top:6px;
-  text-shadow:0 0 10px rgba(56,189,248,.7);
+  text-shadow:0 0 8px rgba(56,189,248,.6);
 }
 
-/* SCORE */
 .leaderboard{
   padding:16px;
   border-top:1px solid var(--border);
 }
+
 .versus{
   display:grid;
   grid-template-columns:1fr auto 1fr;
   gap:12px;
   align-items:center;
 }
+
 .fighter{
   background:#020617;
   border-radius:14px;
   padding:14px;
   border:1px solid var(--border);
   text-align:center;
-  transition:.3s;
 }
-.fighter.win{
-  box-shadow:0 0 30px rgba(14,165,255,.9);
-  transform:scale(1.06);
-}
-.name{font-weight:900}
-.score{font-size:22px;color:var(--blue);font-weight:900}
-.vs{font-weight:1000;color:var(--blue2)}
 
-/* ADMIN */
+.name{font-weight:900;font-size:13px}
+.score{font-size:22px;font-weight:900;color:var(--blue)}
+.vs{font-weight:900;color:var(--blue2)}
+
 .admin{
   display:none;
   position:absolute;
@@ -115,41 +113,54 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   padding:12px;
   z-index:9999;
 }
+
 .adminHeader{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  margin-bottom:8px;
 }
-.adminHeader h3{margin:0;color:var(--blue)}
+
+.adminHeader h3{
+  margin:0;
+  color:var(--blue);
+  font-size:14px;
+}
+
 .closeAdmin{
   background:none;
   border:none;
   color:var(--blue);
-  font-size:20px;
+  font-size:18px;
   font-weight:900;
   cursor:pointer;
 }
+
 .gameList{
   max-height:180px;
   overflow:auto;
   display:grid;
   gap:6px;
-  margin:10px 0;
+  margin-bottom:10px;
 }
+
 .gameBtn{
   padding:8px;
   border-radius:8px;
   border:1px solid var(--border);
   background:#07112a;
   color:#e5f3ff;
-  font-weight:700;
   cursor:pointer;
+  font-weight:700;
+  text-align:left;
 }
+
 .gameBtn.active{
   background:var(--blue2);
   color:#020617;
   font-weight:900;
 }
+
 .admin input{
   width:100%;
   padding:8px;
@@ -158,65 +169,31 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   background:#07112a;
   color:#e5f3ff;
   margin-bottom:6px;
+  font-weight:700;
 }
-.admin button.action{
+
+.admin button.save{
   width:100%;
   padding:10px;
-  border-radius:12px;
+  border-radius:10px;
   background:var(--blue2);
   border:none;
-  font-weight:1000;
-  margin-top:6px;
+  font-weight:900;
   cursor:pointer;
+  color:#020617;
 }
 
-/* BIG WIN OVERLAY */
-.bigwin{
-  position:absolute;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  font-size:36px;
-  font-weight:1000;
-  color:#38bdf8;
-  background:rgba(2,6,23,.9);
-  z-index:10000;
-  animation:flash .5s infinite;
-}
-
-/* CONFETTI */
-.confetti{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  z-index:9000;
-}
-
-/* ANIMATIONS */
 @keyframes pulse{
-  0%{box-shadow:0 0 15px rgba(56,189,248,.3)}
-  50%{box-shadow:0 0 35px rgba(56,189,248,.8)}
-  100%{box-shadow:0 0 15px rgba(56,189,248,.3)}
-}
-@keyframes flash{
-  0%{opacity:1}
-  50%{opacity:.3}
-  100%{opacity:1}
-}
-@keyframes shake{
-  0%{transform:translate(0)}
-  25%{transform:translate(-5px,5px)}
-  50%{transform:translate(5px,-5px)}
-  75%{transform:translate(-5px,-5px)}
-  100%{transform:translate(0)}
+  0%{box-shadow:0 0 12px rgba(56,189,248,.3)}
+  50%{box-shadow:0 0 22px rgba(56,189,248,.6)}
+  100%{box-shadow:0 0 12px rgba(56,189,248,.3)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="widget" id="widget">
+<div class="widget">
   <div class="header">TORNELIOS</div>
 
   <div class="topBar">
@@ -227,24 +204,21 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
   <div class="leaderboard">
     <div class="versus">
-      <div class="fighter" id="p1">
+      <div class="fighter">
         <div class="name" id="p1Name">Maast1k</div>
         <div class="score" id="p1Score">€300</div>
       </div>
       <div class="vs">VS</div>
-      <div class="fighter" id="p2">
+      <div class="fighter">
         <div class="name" id="p2Name">Kazu</div>
         <div class="score" id="p2Score">€100</div>
       </div>
     </div>
   </div>
 
-  <div class="bigwin" id="bigwin">💥 BIG WIN 💥</div>
-
-  <!-- ADMIN -->
   <div class="admin" id="adminPanel">
     <div class="adminHeader">
-      <h3>ADMIN</h3>
+      <h3>ADMIN PANEL</h3>
       <button class="closeAdmin" id="closeAdmin">✕</button>
     </div>
 
@@ -255,40 +229,40 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
     <input id="p2Input" placeholder="Player 2 name">
     <input id="p2ScoreInput" placeholder="Player 2 score" type="number">
 
-    <button class="action" id="saveMatch">Save Match</button>
-    <button class="action" id="bigWinBtn">💥 BIG WIN</button>
+    <button class="save" id="saveMatch">Save Match</button>
   </div>
 </div>
 
-<audio id="bigwinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-game-level-completed-2059.mp3"></audio>
-
 <script>
 const games=[
-{name:'Rip City',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1233_logo_LOGO.png'},
-{name:'Xmas Drop',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1396_logo_Logo.png'},
-{name:'Wanted Dead or a Wild',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1067_logo_Logo.png'},
-{name:'Le Bandit',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1309_logo_Logo.png'}
+  {name:'Rip City',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1233_logo_LOGO.png'},
+  {name:'Xmas Drop',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1396_logo_Logo.png'},
+  {name:'Wanted Dead or a Wild',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1067_logo_Logo.png'},
+  {name:'Le Bandit',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1309_logo_Logo.png'},
+  {name:'Chaos Crew',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1059_logo_1059_logo_chaos_thumbnail.png'}
 ];
 
 const activeSlot=document.getElementById('activeSlot');
 const gameList=document.getElementById('gameList');
-const bigwin=document.getElementById('bigwin');
-const sound=document.getElementById('bigwinSound');
-const widget=document.getElementById('widget');
+const adminPanel=document.getElementById('adminPanel');
 
 function renderGame(game){
-  activeSlot.innerHTML=`<div class="slot"><img src="${game.img}"><div class="slot-name">🎰 ${game.name}</div></div>`;
+  activeSlot.innerHTML=`
+    <div class="slot">
+      <img src="${game.img}">
+      <div class="slot-name">🎰 ${game.name}</div>
+    </div>`;
   localStorage.setItem('activeGame',JSON.stringify(game));
 }
 
-function renderGames(){
+function renderGameList(){
   const active=JSON.parse(localStorage.getItem('activeGame'));
   gameList.innerHTML='';
   games.forEach(g=>{
     const b=document.createElement('button');
     b.className='gameBtn'+(active&&active.name===g.name?' active':'');
     b.textContent=g.name;
-    b.onclick=()=>{renderGame(g);renderGames()};
+    b.onclick=()=>{renderGame(g);renderGameList()};
     gameList.appendChild(b);
   });
 }
@@ -304,28 +278,29 @@ document.getElementById('saveMatch').onclick=()=>{
   p1Score.textContent='€'+s1;
   p2Score.textContent='€'+s2;
 
-  document.getElementById('p1').classList.toggle('win',+s1>+s2);
-  document.getElementById('p2').classList.toggle('win',+s2>+s1);
-
   localStorage.setItem('match',JSON.stringify({p1,p2,s1,s2}));
 };
 
-document.getElementById('bigWinBtn').onclick=()=>{
-  sound.currentTime=0; sound.play();
-  bigwin.style.display='flex';
-  widget.style.animation='shake .5s';
-  setTimeout(()=>{
-    bigwin.style.display='none';
-    widget.style.animation='';
-  },2000);
-};
+function loadMatch(){
+  const m=JSON.parse(localStorage.getItem('match'));
+  if(!m) return;
+  p1Name.textContent=m.p1;
+  p2Name.textContent=m.p2;
+  p1Score.textContent='€'+m.s1;
+  p2Score.textContent='€'+m.s2;
+}
 
 document.getElementById('adminToggle').onclick=()=>adminPanel.style.display='block';
 document.getElementById('closeAdmin').onclick=()=>adminPanel.style.display='none';
 document.addEventListener('keydown',e=>e.key==='Escape'&&(adminPanel.style.display='none'));
+document.addEventListener('click',e=>{
+  if(adminPanel.style.display==='block'&&!adminPanel.contains(e.target)&&!e.target.classList.contains('adminToggle'))
+    adminPanel.style.display='none';
+});
 
 renderGame(JSON.parse(localStorage.getItem('activeGame'))||games[0]);
-renderGames();
+renderGameList();
+loadMatch();
 </script>
 
 </body>
