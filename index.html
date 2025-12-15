@@ -1,364 +1,802 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TORNELIOS Widget</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TORNELIOS Widget</title>
 
-<style>
-:root{
-  --bg:#020617;
-  --panel:#020f2e;
-  --blue:#38bdf8;
-  --blue2:#0ea5ff;
-  --border:rgba(56,189,248,.25);
-}
+  <style>
+    :root{
+      --bg:#020617;
+      --panel:#020f2e;
+      --panel2:#07112a;
+      --blue:#38bdf8;
+      --blue2:#0ea5ff;
+      --border:rgba(56,189,248,.25);
+      --text:#e5f3ff;
+    }
 
-*{box-sizing:border-box}
-body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
+    *{box-sizing:border-box}
+    body{margin:0;background:transparent;font-family:Inter,system-ui,-apple-system,sans-serif}
 
-.widget{
-  width:420px;
-  background:linear-gradient(180deg,#020f2e,#020617);
-  border-radius:18px;
-  border:1px solid var(--border);
-  color:#e5f3ff;
-  overflow:hidden;
-  position:relative;
-  box-shadow:0 0 35px rgba(14,165,255,.25);
-}
+    .widget{
+      width: 820px;
+      background: linear-gradient(180deg, var(--panel), var(--bg));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      color: var(--text);
+      position: relative;
+      box-shadow: 0 0 40px rgba(14,165,255,.25);
+    }
 
-.header{
-  padding:16px;
-  text-align:center;
-  font-weight:900;
-  background:linear-gradient(90deg,#032e6b,#0ea5ff);
-  text-shadow:0 0 10px rgba(56,189,248,.6);
-}
+    .header{
+      padding: 14px 16px;
+      text-align:center;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      background: linear-gradient(90deg, #032e6b, var(--blue2));
+      text-shadow: 0 0 14px rgba(56,189,248,.65);
+      user-select:none;
+    }
 
-.topBar{
-  display:flex;
-  justify-content:center;
-  padding:10px;
-}
+    /* tiny admin buttons (only visible in admin mode) */
+    .adminBtns{
+      position:absolute;
+      top:10px;
+      right:10px;
+      display:flex;
+      gap:6px;
+      z-index: 50;
+    }
+    .adminBtn{
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(7,17,42,.65);
+      border: 1px solid var(--border);
+      color: var(--blue);
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 13px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      backdrop-filter: blur(8px);
+    }
 
-.adminToggle{
-  padding:6px 14px;
-  border-radius:10px;
-  background:#07112a;
-  border:1px solid var(--border);
-  color:var(--blue);
-  font-weight:900;
-  cursor:pointer;
-}
+    /* top two game panels */
+    .gamesRow{
+      display:grid;
+      grid-template-columns: 1fr 70px 1fr;
+      gap: 10px;
+      padding: 14px;
+      align-items: stretch;
+    }
 
-.slotWrap{padding:14px}
+    .gameCard{
+      background: radial-gradient(circle at top, #061a3a, #020617);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow:hidden;
+      position:relative;
+      min-height: 220px;
+      box-shadow: inset 0 0 25px rgba(14,165,255,.18);
+    }
 
-.slot{
-  background:#020617;
-  border-radius:14px;
-  padding:10px;
-  border:1px solid var(--border);
-  text-align:center;
-  animation:pulse 4s infinite;
-}
+    .gameCard img{
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.15) contrast(1.05);
+    }
 
-.slot img{
-  width:100%;
-  height:130px;
-  object-fit:contain;
-  border-radius:10px;
-  background:#000;
-}
+    .gameOverlay{
+      position:absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      display:flex;
+      justify-content: center;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, rgba(2,6,23,.65), rgba(2,6,23,.35));
+      border: 1px solid rgba(56,189,248,.25);
+      border-radius: 14px;
+      backdrop-filter: blur(10px);
+      text-shadow: 0 0 12px rgba(56,189,248,.55);
+      font-weight: 950;
+      letter-spacing:.2px;
+      user-select:none;
+    }
 
-.slot-name{
-  font-weight:900;
-  margin-top:6px;
-  text-shadow:0 0 8px rgba(56,189,248,.6);
-}
+    .vsPillar{
+      border-radius: 18px;
+      border: 1px solid rgba(56,189,248,.25);
+      background: linear-gradient(180deg, rgba(3,46,107,.65), rgba(2,6,23,.85));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: var(--blue2);
+      font-weight: 1000;
+      text-shadow: 0 0 14px rgba(56,189,248,.6);
+      letter-spacing: .6px;
+      user-select:none;
+    }
 
-.leaderboard{
-  padding:16px;
-  border-top:1px solid var(--border);
-}
+    /* bottom players */
+    .playersRow{
+      border-top: 1px solid var(--border);
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1fr 90px 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
 
-.versus{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  gap:12px;
-  align-items:center;
-}
+    .playerCard{
+      background: radial-gradient(circle at top, #061a3a, #020617);
+      border: 1px solid rgba(56,189,248,.28);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: inset 0 0 25px rgba(14,165,255,.18);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.fighter{
-  background:#020617;
-  border-radius:14px;
-  padding:14px;
-  border:1px solid var(--border);
-  text-align:center;
-}
+    .playerTop{
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.name{font-weight:900;font-size:13px}
-.score{font-size:22px;font-weight:900;color:var(--blue)}
-.vs{font-weight:900;color:var(--blue2)}
+    .playerName{
+      font-weight: 1000;
+      font-size: 16px;
+      letter-spacing:.2px;
+      text-shadow: 0 0 10px rgba(56,189,248,.45);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-.admin{
-  display:none;
-  position:absolute;
-  top:60px;
-  left:10px;
-  right:10px;
-  background:#020617;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:12px;
-  z-index:9999;
-}
+    .total{
+      font-weight: 1000;
+      font-size: 18px;
+      color: var(--blue);
+      text-shadow: 0 0 12px rgba(56,189,248,.6);
+      white-space: nowrap;
+    }
 
-.adminHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-}
+    .statsGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
 
-.adminHeader h3{
-  margin:0;
-  color:var(--blue);
-  font-size:14px;
-}
+    .stat{
+      background: rgba(7,17,42,.65);
+      border: 1px solid rgba(56,189,248,.18);
+      border-radius: 12px;
+      padding: 8px;
+      text-align:center;
+    }
 
-.closeAdmin{
-  background:none;
-  border:none;
-  color:var(--blue);
-  font-size:18px;
-  font-weight:900;
-  cursor:pointer;
-}
+    .stat .k{
+      font-size: 10px;
+      opacity: .85;
+      font-weight: 900;
+      letter-spacing:.3px;
+    }
 
-/* GAME LIST – SCROLLABLE */
-.gameList{
-  max-height:180px;
-  overflow-y:auto;
-  display:grid;
-  gap:6px;
-  margin-bottom:10px;
-  padding-right:4px;
-}
+    .stat .v{
+      margin-top: 4px;
+      font-weight: 1000;
+      font-size: 14px;
+    }
 
-.gameList::-webkit-scrollbar{
-  width:6px;
-}
-.gameList::-webkit-scrollbar-thumb{
-  background:var(--blue2);
-  border-radius:4px;
-}
-.gameList::-webkit-scrollbar-track{
-  background:#07112a;
-}
+    .centerVS{
+      border-radius: 18px;
+      border: 1px solid rgba(56,189,248,.25);
+      background: linear-gradient(180deg, rgba(7,17,42,.65), rgba(2,6,23,.9));
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      justify-content:center;
+      gap: 6px;
+      user-select:none;
+    }
 
-.gameBtn{
-  padding:8px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#07112a;
-  color:#e5f3ff;
-  cursor:pointer;
-  font-weight:700;
-  text-align:left;
-}
+    .centerVS .vsBig{ font-weight: 1100; font-size: 18px; color: var(--blue2); text-shadow: 0 0 14px rgba(56,189,248,.6);}    
+    .centerVS .mini{ font-size: 10px; opacity: .75; font-weight: 900; letter-spacing:.3px; }
 
-.gameBtn.active{
-  background:var(--blue2);
-  color:#020617;
-  font-weight:900;
-}
+    .footer{
+      padding: 8px 14px 12px;
+      text-align:center;
+      font-size: 10px;
+      opacity: .55;
+      border-top: 1px solid rgba(56,189,248,.14);
+      user-select:none;
+    }
 
-.admin input{
-  width:100%;
-  padding:8px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#07112a;
-  color:#e5f3ff;
-  margin-bottom:6px;
-  font-weight:700;
-}
+    /* ADMIN PANELS */
+    .panel{
+      display:none;
+      position:absolute;
+      top: 56px;
+      right: 10px;
+      width: 340px;
+      max-height: 80vh;
+      overflow:auto;
+      background: rgba(2,6,23,.92);
+      border: 1px solid rgba(56,189,248,.28);
+      border-radius: 16px;
+      padding: 12px;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 0 30px rgba(14,165,255,.22);
+    }
 
-/* CALCULATOR */
-.calc{
-  border:1px dashed var(--border);
-  border-radius:10px;
-  padding:8px;
-  margin-bottom:8px;
-}
+    .panelHeader{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+    .panelHeader h3{margin:0; font-size: 13px; color: var(--blue); font-weight: 1000; letter-spacing:.3px;}
+    .xBtn{border:none; background:transparent; color: var(--blue); font-weight: 1000; cursor:pointer; font-size: 16px;}
 
-.calcTitle{
-  font-size:12px;
-  font-weight:900;
-  color:var(--blue);
-  margin-bottom:4px;
-  text-align:center;
-}
+    .row{display:flex; gap:8px;}
+    .row > *{flex:1;}
 
-.calcRow{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
+    input, select, button{
+      font-family:inherit;
+    }
 
-.calcTotal{
-  text-align:center;
-  font-weight:900;
-  margin:6px 0;
-  color:var(--blue2);
-}
+    .panel input, .panel select{
+      width: 100%;
+      padding: 9px;
+      border-radius: 10px;
+      border: 1px solid rgba(56,189,248,.22);
+      background: rgba(7,17,42,.75);
+      color: var(--text);
+      font-weight: 800;
+      outline: none;
+    }
 
-.calcButtons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
+    .panel label{display:block; font-size: 10px; opacity:.8; font-weight: 900; letter-spacing:.3px; margin: 10px 0 6px;}
 
-.calcButtons button{
-  padding:8px;
-  border-radius:8px;
-  border:none;
-  background:var(--blue2);
-  font-weight:900;
-  cursor:pointer;
-  color:#020617;
-}
+    .btn{
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      background: var(--blue2);
+      color: #041026;
+      font-weight: 1000;
+      cursor:pointer;
+    }
 
-.admin button.save{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  background:var(--blue2);
-  border:none;
-  font-weight:900;
-  cursor:pointer;
-  color:#020617;
-}
+    .btn2{
+      width:100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(56,189,248,.25);
+      background: rgba(7,17,42,.75);
+      color: var(--text);
+      font-weight: 1000;
+      cursor:pointer;
+    }
 
-@keyframes pulse{
-  0%{box-shadow:0 0 12px rgba(56,189,248,.3)}
-  50%{box-shadow:0 0 22px rgba(56,189,248,.6)}
-  100%{box-shadow:0 0 12px rgba(56,189,248,.3)}
-}
-</style>
+    .gamePick{
+      display:grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .gameSearch{margin-top: 6px;}
+
+    .gameList{
+      max-height: 280px;
+      overflow:auto;
+      border: 1px solid rgba(56,189,248,.16);
+      border-radius: 12px;
+      background: rgba(7,17,42,.35);
+      padding: 6px;
+    }
+
+    .gameItem{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      cursor:pointer;
+    }
+
+    .gameItem:hover{border-color: rgba(56,189,248,.25); background: rgba(7,17,42,.55);}
+    .gameItem img{width: 44px; height: 26px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(56,189,248,.15);}
+    .gameItem .t{font-weight: 950; font-size: 12px; line-height: 1.1;}
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(7,17,42,.55);
+      border: 1px solid rgba(56,189,248,.18);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing:.2px;
+    }
+
+    /* small screens */
+    @media (max-width: 860px){
+      .widget{width: 420px;}
+      .gamesRow{grid-template-columns: 1fr;}
+      .vsPillar{display:none;}
+      .playersRow{grid-template-columns: 1fr;}
+      .centerVS{display:none;}
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="widget">
+<div class="widget" id="widgetRoot">
   <div class="header">TORNELIOS</div>
 
-  <div class="topBar">
-    <button class="adminToggle" id="adminToggle">⚙ Admin</button>
+  <div class="adminBtns" id="adminBtns">
+    <button class="adminBtn" id="gamesBtn" title="Games">🎰</button>
+    <button class="adminBtn" id="matchBtn" title="Match">🧮</button>
   </div>
 
-  <div class="slotWrap" id="activeSlot"></div>
+  <!-- TOP: two selected games -->
+  <div class="gamesRow">
+    <div class="gameCard" id="gameCardP1">
+      <img id="gameImgP1" alt="P1 game" />
+      <div class="gameOverlay"><span id="gameNameP1">Select Game</span></div>
+    </div>
 
-  <div class="leaderboard">
-    <div class="versus">
-      <div class="fighter">
-        <div class="name" id="p1Name">Maast1k</div>
-        <div class="score" id="p1Score">€300</div>
+    <div class="vsPillar">VS</div>
+
+    <div class="gameCard" id="gameCardP2">
+      <img id="gameImgP2" alt="P2 game" />
+      <div class="gameOverlay"><span id="gameNameP2">Select Game</span></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM: players + totals + last buy multiplier -->
+  <div class="playersRow">
+    <div class="playerCard">
+      <div class="playerTop">
+        <div class="playerName" id="p1Name">Maast1k</div>
+        <div class="total" id="p1Total">£0</div>
       </div>
-      <div class="vs">VS</div>
-      <div class="fighter">
-        <div class="name" id="p2Name">Kazu</div>
-        <div class="score" id="p2Score">€100</div>
+      <div class="statsGrid">
+        <div class="stat"><div class="k">LAST BUY</div><div class="v" id="p1LastBuy">£0</div></div>
+        <div class="stat"><div class="k">LAST WIN</div><div class="v" id="p1LastWin">£0</div></div>
+        <div class="stat"><div class="k">MULTI</div><div class="v" id="p1LastX">0x</div></div>
+      </div>
+    </div>
+
+    <div class="centerVS">
+      <div class="vsBig">VS</div>
+      <div class="mini">2 BUYS / PLAYER</div>
+    </div>
+
+    <div class="playerCard">
+      <div class="playerTop">
+        <div class="playerName" id="p2Name">Kazu</div>
+        <div class="total" id="p2Total">£0</div>
+      </div>
+      <div class="statsGrid">
+        <div class="stat"><div class="k">LAST BUY</div><div class="v" id="p2LastBuy">£0</div></div>
+        <div class="stat"><div class="k">LAST WIN</div><div class="v" id="p2LastWin">£0</div></div>
+        <div class="stat"><div class="k">MULTI</div><div class="v" id="p2LastX">0x</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN -->
-  <div class="admin" id="adminPanel">
-    <div class="adminHeader">
-      <h3>ADMIN PANEL</h3>
-      <button class="closeAdmin" id="closeAdmin">✕</button>
+  <div class="footer">Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>
+
+  <!-- ADMIN: GAMES -->
+  <div class="panel" id="gamesPanel">
+    <div class="panelHeader">
+      <h3>GAMES</h3>
+      <button class="xBtn" id="closeGames">✕</button>
     </div>
 
-    <div class="gameList" id="gameList"></div>
-
-    <!-- CALCULATOR -->
-    <div class="calc">
-      <div class="calcTitle">2-BUY CALCULATOR</div>
-      <div class="calcRow">
-        <input id="buy1" type="number" placeholder="Buy 1 €">
-        <input id="buy2" type="number" placeholder="Buy 2 €">
-      </div>
-      <div class="calcTotal">Total: €<span id="calcTotal">0</span></div>
-      <div class="calcButtons">
-        <button onclick="applyTotal(1)">Apply to P1</button>
-        <button onclick="applyTotal(2)">Apply to P2</button>
-      </div>
+    <div class="row">
+      <span class="pill">P1: <strong id="pillP1">(none)</strong></span>
+      <span class="pill">P2: <strong id="pillP2">(none)</strong></span>
     </div>
 
-    <input id="p1Input" placeholder="Player 1 name">
-    <input id="p2Input" placeholder="Player 2 name">
+    <label class="gameSearch">Search games</label>
+    <input id="gameSearch" placeholder="Type to filter…" />
 
-    <button class="save" id="saveMatch">Save Match</button>
+    <div class="gamePick">
+      <div class="row">
+        <button class="btn2" id="setModeP1">Select for P1</button>
+        <button class="btn2" id="setModeP2">Select for P2</button>
+      </div>
+      <div style="font-size:10px; opacity:.8; font-weight:900; letter-spacing:.25px; text-align:center;">Click a game below to assign to the active player</div>
+
+      <div class="gameList" id="gameList"></div>
+    </div>
+  </div>
+
+  <!-- ADMIN: MATCH / CALC -->
+  <div class="panel" id="matchPanel">
+    <div class="panelHeader">
+      <h3>MATCH & CALC</h3>
+      <button class="xBtn" id="closeMatch">✕</button>
+    </div>
+
+    <label>Player names</label>
+    <div class="row">
+      <input id="p1NameIn" placeholder="P1 name" />
+      <input id="p2NameIn" placeholder="P2 name" />
+    </div>
+    <button class="btn" id="saveNames">Save Names</button>
+
+    <label style="margin-top:14px;">Add a buy result (auto calculates X = Win ÷ Buy)</label>
+    <div class="row">
+      <select id="targetPlayer">
+        <option value="p1">Add to P1</option>
+        <option value="p2">Add to P2</option>
+      </select>
+      <select id="currency">
+        <option value="£">£</option>
+        <option value="€">€</option>
+        <option value="$">$</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <input id="buyAmount" type="number" step="0.01" placeholder="Buy cost (e.g. 0.20)" />
+      <input id="winAmount" type="number" step="0.01" placeholder="Win (e.g. 200)" />
+    </div>
+
+    <button class="btn" id="addResult">Add Result</button>
+
+    <label>Totals (editable)</label>
+    <div class="row">
+      <input id="p1TotalIn" type="number" step="0.01" placeholder="P1 total" />
+      <input id="p2TotalIn" type="number" step="0.01" placeholder="P2 total" />
+    </div>
+    <button class="btn2" id="setTotals">Set Totals</button>
+
+    <label>Reset</label>
+    <div class="row">
+      <button class="btn2" id="resetP1">Reset P1</button>
+      <button class="btn2" id="resetP2">Reset P2</button>
+    </div>
   </div>
 </div>
 
 <script>
-const games=[
-  {name:'Rip City',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1233_logo_LOGO.png'},
-  {name:'Xmas Drop',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1396_logo_Logo.png'},
-  {name:'Wanted Dead or a Wild',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1067_logo_Logo.png'},
-  {name:'Le Bandit',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1309_logo_Logo.png'},
-  {name:'Chaos Crew',img:'https://www-live.hacksawgaming.com/casino_thumbnails/1059_logo_1059_logo_chaos_thumbnail.png'}
-];
+  // ===== Admin visibility (hidden on stream unless ?admin=1) =====
+  const isAdmin = new URLSearchParams(location.search).has('admin');
+  const adminBtns = document.getElementById('adminBtns');
+  adminBtns.style.display = isAdmin ? 'flex' : 'none';
 
-const activeSlot=document.getElementById('activeSlot');
-const gameList=document.getElementById('gameList');
-const adminPanel=document.getElementById('adminPanel');
+  // ===== State (persisted) =====
+  const LS_KEY = 'tornelios_state_v2';
+  const defaultState = {
+    currency: '£',
+    p1: { name: 'Maast1k', total: 0, lastBuy: 0, lastWin: 0, lastX: 0, game: null },
+    p2: { name: 'Kazu', total: 0, lastBuy: 0, lastWin: 0, lastX: 0, game: null },
+  };
 
-function renderGame(game){
-  activeSlot.innerHTML=`<div class="slot"><img src="${game.img}"><div class="slot-name">🎰 ${game.name}</div></div>`;
-  localStorage.setItem('activeGame',JSON.stringify(game));
-}
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return structuredClone(defaultState);
+      const s = JSON.parse(raw);
+      // soft-merge to handle future upgrades
+      return {
+        ...structuredClone(defaultState),
+        ...s,
+        p1: { ...structuredClone(defaultState.p1), ...(s.p1||{}) },
+        p2: { ...structuredClone(defaultState.p2), ...(s.p2||{}) },
+      };
+    }catch{
+      return structuredClone(defaultState);
+    }
+  }
 
-function renderGameList(){
-  const active=JSON.parse(localStorage.getItem('activeGame'));
-  gameList.innerHTML='';
-  games.forEach(g=>{
-    const b=document.createElement('button');
-    b.className='gameBtn'+(active&&active.name===g.name?' active':'');
-    b.textContent=g.name;
-    b.onclick=()=>{renderGame(g);renderGameList()};
-    gameList.appendChild(b);
-  });
-}
+  function saveState(){
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  }
 
-document.getElementById('saveMatch').onclick=()=>{
-  p1Name.textContent=document.getElementById('p1Input').value||p1Name.textContent;
-  p2Name.textContent=document.getElementById('p2Input').value||p2Name.textContent;
-};
+  let state = loadState();
 
-function updateCalc(){
-  const t=(+buy1.value||0)+(+buy2.value||0);
-  document.getElementById('calcTotal').textContent=t;
-}
-buy1.oninput=updateCalc;
-buy2.oninput=updateCalc;
+  // ===== Elements =====
+  const p1Name = document.getElementById('p1Name');
+  const p2Name = document.getElementById('p2Name');
+  const p1Total = document.getElementById('p1Total');
+  const p2Total = document.getElementById('p2Total');
+  const p1LastBuy = document.getElementById('p1LastBuy');
+  const p2LastBuy = document.getElementById('p2LastBuy');
+  const p1LastWin = document.getElementById('p1LastWin');
+  const p2LastWin = document.getElementById('p2LastWin');
+  const p1LastX = document.getElementById('p1LastX');
+  const p2LastX = document.getElementById('p2LastX');
 
-function applyTotal(p){
-  const t=document.getElementById('calcTotal').textContent;
-  if(p===1) p1Score.textContent='€'+t;
-  if(p===2) p2Score.textContent='€'+t;
-}
+  const gameImgP1 = document.getElementById('gameImgP1');
+  const gameImgP2 = document.getElementById('gameImgP2');
+  const gameNameP1 = document.getElementById('gameNameP1');
+  const gameNameP2 = document.getElementById('gameNameP2');
 
-document.getElementById('adminToggle').onclick=()=>adminPanel.style.display='block';
-document.getElementById('closeAdmin').onclick=()=>adminPanel.style.display='none';
+  const pillP1 = document.getElementById('pillP1');
+  const pillP2 = document.getElementById('pillP2');
 
-renderGame(JSON.parse(localStorage.getItem('activeGame'))||games[0]);
-renderGameList();
+  // Panels
+  const gamesPanel = document.getElementById('gamesPanel');
+  const matchPanel = document.getElementById('matchPanel');
+  const gamesBtn = document.getElementById('gamesBtn');
+  const matchBtn = document.getElementById('matchBtn');
+  const closeGames = document.getElementById('closeGames');
+  const closeMatch = document.getElementById('closeMatch');
+
+  function hidePanels(){
+    gamesPanel.style.display = 'none';
+    matchPanel.style.display = 'none';
+  }
+
+  function togglePanel(panel){
+    const showing = panel.style.display === 'block';
+    hidePanels();
+    panel.style.display = showing ? 'none' : 'block';
+  }
+
+  if(isAdmin){
+    gamesBtn.onclick = () => togglePanel(gamesPanel);
+    matchBtn.onclick = () => togglePanel(matchPanel);
+    closeGames.onclick = hidePanels;
+    closeMatch.onclick = hidePanels;
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') hidePanels();
+    });
+
+    document.addEventListener('mousedown', (e)=>{
+      if(gamesPanel.style.display==='block' && !gamesPanel.contains(e.target) && e.target!==gamesBtn) hidePanels();
+      if(matchPanel.style.display==='block' && !matchPanel.contains(e.target) && e.target!==matchBtn) hidePanels();
+    });
+  }
+
+  // ===== Formatting =====
+  function money(v){
+    const n = Number(v || 0);
+    // keep 2 decimals if not integer
+    const isInt = Math.abs(n - Math.round(n)) < 1e-9;
+    const s = isInt ? n.toLocaleString() : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `${state.currency}${s}`;
+  }
+
+  function xFmt(v){
+    const n = Number(v || 0);
+    if(!isFinite(n) || n<=0) return '0x';
+    // show 0–2 decimals depending
+    const s = n >= 100 ? n.toFixed(0) : (n >= 10 ? n.toFixed(1) : n.toFixed(2));
+    return `${s}x`;
+  }
+
+  // ===== Render =====
+  function render(){
+    p1Name.textContent = state.p1.name;
+    p2Name.textContent = state.p2.name;
+
+    p1Total.textContent = money(state.p1.total);
+    p2Total.textContent = money(state.p2.total);
+
+    p1LastBuy.textContent = money(state.p1.lastBuy);
+    p2LastBuy.textContent = money(state.p2.lastBuy);
+
+    p1LastWin.textContent = money(state.p1.lastWin);
+    p2LastWin.textContent = money(state.p2.lastWin);
+
+    p1LastX.textContent = xFmt(state.p1.lastX);
+    p2LastX.textContent = xFmt(state.p2.lastX);
+
+    // games
+    if(state.p1.game?.img){
+      gameImgP1.src = state.p1.game.img;
+      gameNameP1.textContent = state.p1.game.name;
+      pillP1.textContent = state.p1.game.name;
+    } else {
+      gameImgP1.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700"><rect width="100%" height="100%" fill="#020617"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-family="Arial" font-size="46" font-weight="900">Select P1 Game</text></svg>`);
+      gameNameP1.textContent = 'Select Game';
+      pillP1.textContent = '(none)';
+    }
+
+    if(state.p2.game?.img){
+      gameImgP2.src = state.p2.game.img;
+      gameNameP2.textContent = state.p2.game.name;
+      pillP2.textContent = state.p2.game.name;
+    } else {
+      gameImgP2.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700"><rect width="100%" height="100%" fill="#020617"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-family="Arial" font-size="46" font-weight="900">Select P2 Game</text></svg>`);
+      gameNameP2.textContent = 'Select Game';
+      pillP2.textContent = '(none)';
+    }
+
+    // admin form defaults
+    if(isAdmin){
+      document.getElementById('p1NameIn').value = state.p1.name;
+      document.getElementById('p2NameIn').value = state.p2.name;
+      document.getElementById('currency').value = state.currency;
+      document.getElementById('p1TotalIn').value = state.p1.total || 0;
+      document.getElementById('p2TotalIn').value = state.p2.total || 0;
+    }
+  }
+
+  render();
+
+  // ===== Load games from games.json (recommended) =====
+  let allGames = [];
+  const fallbackGames = [
+    { name: 'Rip City', img: 'https://www-live.hacksawgaming.com/casino_thumbnails/1233_logo_LOGO.png' },
+    { name: 'Xmas Drop', img: 'https://www-live.hacksawgaming.com/casino_thumbnails/1396_logo_Logo.png' },
+    { name: 'Wanted Dead or a Wild', img: 'https://www-live.hacksawgaming.com/casino_thumbnails/1067_logo_Logo.png' },
+    { name: 'Le Bandit', img: 'https://www-live.hacksawgaming.com/casino_thumbnails/1309_logo_Logo.png' },
+    { name: 'Chaos Crew', img: 'https://www-live.hacksawgaming.com/casino_thumbnails/1059_logo_1059_logo_chaos_thumbnail.png' },
+  ];
+
+  async function loadGames(){
+    try{
+      const res = await fetch('./games.json?v=' + Date.now(), { cache: 'no-store' });
+      if(!res.ok) throw new Error('games.json not found');
+      const data = await res.json();
+      if(!Array.isArray(data)) throw new Error('games.json must be an array');
+      allGames = data
+        .filter(x => x && typeof x.name === 'string' && typeof x.img === 'string')
+        .map(x => ({ name: x.name.trim(), img: x.img.trim() }));
+      if(!allGames.length) throw new Error('empty');
+    }catch{
+      allGames = fallbackGames;
+    }
+
+    if(isAdmin) buildGameList();
+  }
+
+  loadGames();
+
+  // ===== Games panel logic =====
+  let assignMode = 'p1';
+  const gameListEl = document.getElementById('gameList');
+  const searchEl = document.getElementById('gameSearch');
+  const setModeP1 = document.getElementById('setModeP1');
+  const setModeP2 = document.getElementById('setModeP2');
+
+  function setMode(mode){
+    assignMode = mode;
+    setModeP1.style.borderColor = mode==='p1' ? 'rgba(56,189,248,.5)' : 'rgba(56,189,248,.25)';
+    setModeP2.style.borderColor = mode==='p2' ? 'rgba(56,189,248,.5)' : 'rgba(56,189,248,.25)';
+    setModeP1.style.boxShadow = mode==='p1' ? '0 0 12px rgba(56,189,248,.25)' : 'none';
+    setModeP2.style.boxShadow = mode==='p2' ? '0 0 12px rgba(56,189,248,.25)' : 'none';
+  }
+
+  function buildGameList(){
+    const q = (searchEl.value || '').toLowerCase().trim();
+    const items = q ? allGames.filter(g => g.name.toLowerCase().includes(q)) : allGames;
+
+    gameListEl.innerHTML = '';
+    const frag = document.createDocumentFragment();
+
+    // keep list snappy
+    const maxRender = 240;
+    items.slice(0, maxRender).forEach(g => {
+      const div = document.createElement('div');
+      div.className = 'gameItem';
+      div.innerHTML = `<img src="${g.img}" alt=""><div class="t">${escapeHtml(g.name)}</div>`;
+      div.onclick = () => {
+        if(assignMode === 'p1') state.p1.game = g;
+        else state.p2.game = g;
+        saveState();
+        render();
+      };
+      frag.appendChild(div);
+    });
+
+    gameListEl.appendChild(frag);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
+  }
+
+  if(isAdmin){
+    setModeP1.onclick = () => setMode('p1');
+    setModeP2.onclick = () => setMode('p2');
+    searchEl.addEventListener('input', () => buildGameList());
+    setMode('p1');
+  }
+
+  // ===== Match panel logic =====
+  if(isAdmin){
+    const p1NameIn = document.getElementById('p1NameIn');
+    const p2NameIn = document.getElementById('p2NameIn');
+    const saveNames = document.getElementById('saveNames');
+
+    const currencySel = document.getElementById('currency');
+    const targetPlayer = document.getElementById('targetPlayer');
+    const buyAmount = document.getElementById('buyAmount');
+    const winAmount = document.getElementById('winAmount');
+    const addResult = document.getElementById('addResult');
+
+    const p1TotalIn = document.getElementById('p1TotalIn');
+    const p2TotalIn = document.getElementById('p2TotalIn');
+    const setTotals = document.getElementById('setTotals');
+
+    const resetP1 = document.getElementById('resetP1');
+    const resetP2 = document.getElementById('resetP2');
+
+    saveNames.onclick = () => {
+      const n1 = p1NameIn.value.trim();
+      const n2 = p2NameIn.value.trim();
+      if(n1) state.p1.name = n1;
+      if(n2) state.p2.name = n2;
+      saveState();
+      render();
+    };
+
+    currencySel.onchange = () => {
+      state.currency = currencySel.value;
+      saveState();
+      render();
+    };
+
+    addResult.onclick = () => {
+      const target = targetPlayer.value;
+      const buy = Number(buyAmount.value);
+      const win = Number(winAmount.value);
+
+      if(!isFinite(buy) || buy <= 0 || !isFinite(win) || win < 0) return;
+
+      const x = win / buy; // e.g. £200 win on £0.20 buy => 1000x
+
+      const t = (target === 'p1') ? state.p1 : state.p2;
+      t.lastBuy = buy;
+      t.lastWin = win;
+      t.lastX = x;
+      t.total = Number(t.total || 0) + win; // total = sum of wins (simple + readable)
+
+      saveState();
+      render();
+
+      // clear inputs for speed
+      winAmount.value = '';
+      buyAmount.value = '';
+      buyAmount.focus();
+    };
+
+    setTotals.onclick = () => {
+      const n1 = Number(p1TotalIn.value);
+      const n2 = Number(p2TotalIn.value);
+      if(isFinite(n1)) state.p1.total = n1;
+      if(isFinite(n2)) state.p2.total = n2;
+      saveState();
+      render();
+    };
+
+    resetP1.onclick = () => {
+      state.p1.total = 0; state.p1.lastBuy = 0; state.p1.lastWin = 0; state.p1.lastX = 0;
+      saveState();
+      render();
+    };
+
+    resetP2.onclick = () => {
+      state.p2.total = 0; state.p2.lastBuy = 0; state.p2.lastWin = 0; state.p2.lastX = 0;
+      saveState();
+      render();
+    };
+
+    // If games panel opens and games.json hasn't loaded yet, build list after load
+    const origToggle = togglePanel;
+  }
 </script>
 
 </body>
 </html>
-
