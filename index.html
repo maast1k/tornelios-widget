@@ -8,23 +8,22 @@
 <style>
 :root{
   --bg:#020617;
-  --panel:#041026;
+  --panel:#020f2e;
   --blue:#38bdf8;
   --blue2:#0ea5ff;
   --border:rgba(56,189,248,.25);
   --text:#e5f3ff;
 }
 *{box-sizing:border-box}
-body{margin:0;background:transparent;font-family:Inter,system-ui}
+body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
 .widget{
   width:720px;
   background:linear-gradient(180deg,var(--panel),var(--bg));
   border:1px solid var(--border);
   border-radius:22px;
-  color:var(--text);
   overflow:hidden;
-  position:relative;
+  color:var(--text);
 }
 
 .header{
@@ -32,41 +31,36 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   padding:14px;
   font-size:22px;
   font-weight:1200;
-  background:linear-gradient(90deg,#022c5c,var(--blue2));
+  letter-spacing:1px;
+  background:linear-gradient(90deg,#021b3a,var(--blue2));
   text-shadow:0 0 20px rgba(56,189,248,.9);
 }
 
-.gamesRow{
+.games{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
   gap:10px;
   padding:12px;
 }
 
-.gameCard{
+.game{
   height:140px;
   border-radius:16px;
-  background:#020617;
   border:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:center;
+  background:#020617;
 }
-.gameCard img{
+.game img{
   max-width:85%;
   max-height:85%;
   object-fit:contain;
 }
 
-.vs{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:1000;
-  color:var(--blue2);
-}
+.vs{display:flex;align-items:center;justify-content:center;font-weight:1000;color:var(--blue2)}
 
-.playersRow{
+.players{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
   gap:10px;
@@ -74,35 +68,29 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
 }
 
 .player{
-  border-radius:16px;
-  background:rgba(7,17,42,.8);
+  border-radius:18px;
   border:1px solid var(--border);
   padding:12px;
+  background:rgba(7,17,42,.7);
 }
 
-.playerName{
-  text-align:center;
-  font-size:16px;
-  font-weight:1100;
-  margin-bottom:8px;
-}
+.player h3{text-align:center;margin:0 0 8px}
 
-.buyGrid{
+.buys{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
 }
 
-.buyBox{
+.buy{
   background:#020617;
-  border:1px solid rgba(56,189,248,.18);
   border-radius:12px;
   padding:8px;
   text-align:center;
+  border:1px solid rgba(56,189,248,.18);
 }
-
-.buyBox strong{display:block;font-size:14px}
-.buyBox span{font-size:11px;opacity:.8}
+.buy strong{display:block;font-size:14px}
+.buy span{font-size:11px;opacity:.75}
 
 .total{
   grid-column:1/3;
@@ -115,7 +103,7 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
 
 /* ADMIN */
 .adminBtns{position:absolute;top:8px;right:8px;display:none;gap:6px}
-.adminBtn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:#041026;color:var(--blue);cursor:pointer}
+.adminBtn{width:28px;height:28px;border-radius:50%;background:#041026;color:var(--blue);border:1px solid var(--border);cursor:pointer}
 
 .panel{
   display:none;
@@ -129,11 +117,18 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   padding:12px;
   z-index:100;
 }
-.panel h3{margin:0 0 8px;color:var(--blue)}
-.panel input,.panel select{width:100%;margin-bottom:8px;padding:8px;border-radius:10px;border:1px solid var(--border);background:#041026;color:#fff}
-.panel button{width:100%;padding:10px;border-radius:10px;border:none;background:var(--blue2);font-weight:1000}
+.panel input,.panel select,.panel button{
+  width:100%;
+  margin-bottom:8px;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#041026;
+  color:#fff;
+}
+.panel button{background:var(--blue2);color:#041026;font-weight:1000}
 
-.gameList{max-height:260px;overflow:auto;border:1px solid rgba(56,189,248,.18);border-radius:10px}
+.gameList{max-height:260px;overflow:auto;border:1px solid var(--border);border-radius:10px}
 .gameItem{display:flex;gap:8px;padding:6px;cursor:pointer}
 .gameItem img{width:40px;height:24px;object-fit:contain}
 .gameItem:hover{background:rgba(56,189,248,.1)}
@@ -142,109 +137,105 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
 
 <body>
 <div class="widget">
-  <div class="header">🏆 TORNELIOS 🎰</div>
 
-  <div class="adminBtns" id="adminBtns">
-    <button class="adminBtn" id="gamesBtn">🎰</button>
-    <button class="adminBtn" id="calcBtn">🧮</button>
-  </div>
+<div class="header">🏆 TORNELIOS 🎰</div>
 
-  <div class="gamesRow">
-    <div class="gameCard"><img id="g1"></div>
-    <div class="vs">VS</div>
-    <div class="gameCard"><img id="g2"></div>
-  </div>
+<div class="adminBtns" id="adminBtns">
+  <button class="adminBtn" id="gamesBtn">🎰</button>
+  <button class="adminBtn" id="calcBtn">🧮</button>
+</div>
 
-  <div class="playersRow">
-    <div class="player">
-      <div class="playerName" id="p1Name">Player 1</div>
-      <div class="buyGrid">
-        <div class="buyBox"><strong id="p1w1">£0</strong><span id="p1m1">0x</span></div>
-        <div class="buyBox"><strong id="p1w2">£0</strong><span id="p1m2">0x</span></div>
-        <div class="total" id="p1t">£0</div>
-      </div>
-    </div>
+<div class="games">
+  <div class="game"><img id="g1"></div>
+  <div class="vs">VS</div>
+  <div class="game"><img id="g2"></div>
+</div>
 
-    <div class="vs">VS</div>
-
-    <div class="player">
-      <div class="playerName" id="p2Name">Player 2</div>
-      <div class="buyGrid">
-        <div class="buyBox"><strong id="p2w1">£0</strong><span id="p2m1">0x</span></div>
-        <div class="buyBox"><strong id="p2w2">£0</strong><span id="p2m2">0x</span></div>
-        <div class="total" id="p2t">£0</div>
-      </div>
+<div class="players">
+  <div class="player">
+    <h3 id="p1Name">Player 1</h3>
+    <div class="buys">
+      <div class="buy"><strong id="p1b1">£0</strong><span id="p1x1">0x</span></div>
+      <div class="buy"><strong id="p1b2">£0</strong><span id="p1x2">0x</span></div>
+      <div class="total" id="p1t">£0</div>
     </div>
   </div>
 
-  <!-- ADMIN PANELS -->
-  <div class="panel" id="gamesPanel">
-    <h3>Games</h3>
-    <div class="gameList" id="gameList"></div>
-  </div>
+  <div class="vs">VS</div>
 
-  <div class="panel" id="calcPanel">
-    <h3>Admin</h3>
-    <input id="p1name" placeholder="Player 1 name">
-    <input id="p2name" placeholder="Player 2 name">
-    <input id="spin" type="number" step="0.01" placeholder="Spin bet (e.g. 0.40)">
-    <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
-    <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
-    <input id="win" type="number" step="0.01" placeholder="Win">
-    <button id="save">Save</button>
+  <div class="player">
+    <h3 id="p2Name">Player 2</h3>
+    <div class="buys">
+      <div class="buy"><strong id="p2b1">£0</strong><span id="p2x1">0x</span></div>
+      <div class="buy"><strong id="p2b2">£0</strong><span id="p2x2">0x</span></div>
+      <div class="total" id="p2t">£0</div>
+    </div>
   </div>
+</div>
+
+<!-- ADMIN PANELS -->
+<div class="panel" id="gamesPanel"><div class="gameList" id="gameList"></div></div>
+
+<div class="panel" id="calcPanel">
+  <input id="p1NameIn" placeholder="Player 1 Name">
+  <input id="p2NameIn" placeholder="Player 2 Name">
+  <input id="buyCost" type="number" step="0.01" placeholder="Bonus Buy Cost (e.g. 80)">
+  <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
+  <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
+  <input id="win" type="number" step="0.01" placeholder="Win Amount">
+  <button id="save">Save</button>
+</div>
+
 </div>
 
 <script>
 const isAdmin=new URLSearchParams(location.search).has('admin');
 if(isAdmin)document.getElementById('adminBtns').style.display='flex';
 
-const LS='tornelios_state';
-let state=JSON.parse(localStorage.getItem(LS)||'{"spin":0.4,"p1":{"name":"Player 1","wins":[0,0],"game":null},"p2":{"name":"Player 2","wins":[0,0],"game":null}}');
+function fixImg(url){
+  return 'https://images.weserv.nl/?url='+url.replace(/^https?:\/\//,'');
+}
+
+let state=JSON.parse(localStorage.getItem('tornelios')||'{"buy":80,"p1":{"name":"Player 1","wins":[0,0],"game":null},"p2":{"name":"Player 2","wins":[0,0],"game":null}}');
 
 function render(){
 ['1','2'].forEach(p=>{
 const s=state['p'+p];
 document.getElementById('p'+p+'Name').textContent=s.name;
-const t=s.wins[0]+s.wins[1];
-document.getElementById('p'+p+'w1').textContent='£'+s.wins[0];
-document.getElementById('p'+p+'w2').textContent='£'+s.wins[1];
-document.getElementById('p'+p+'m1').textContent=(s.wins[0]/state.spin||0).toFixed(1)+'x';
-document.getElementById('p'+p+'m2').textContent=(s.wins[1]/state.spin||0).toFixed(1)+'x';
-document.getElementById('p'+p+'t').textContent='£'+t;
-if(s.game)document.getElementById('g'+p).src=s.game.img;
+document.getElementById('p'+p+'b1').textContent='£'+s.wins[0];
+document.getElementById('p'+p+'b2').textContent='£'+s.wins[1];
+document.getElementById('p'+p+'x1').textContent=(s.wins[0]/state.buy||0).toFixed(1)+'x';
+document.getElementById('p'+p+'x2').textContent=(s.wins[1]/state.buy||0).toFixed(1)+'x';
+document.getElementById('p'+p+'t').textContent='£'+(s.wins[0]+s.wins[1]);
+if(s.game)document.getElementById('g'+p).src=fixImg(s.game.img);
 });
 }
 render();
 
 if(isAdmin){
-document.getElementById('gamesBtn').onclick=()=>toggle('gamesPanel');
-document.getElementById('calcBtn').onclick=()=>toggle('calcPanel');
+gamesBtn.onclick=()=>gamesPanel.style.display=gamesPanel.style.display?'':'block';
+calcBtn.onclick=()=>calcPanel.style.display=calcPanel.style.display?'':'block';
 
-fetch('./games.json?'+Date.now())
-.then(r=>r.json())
-.then(list=>{
-const gl=document.getElementById('gameList');
+fetch('./games.json').then(r=>r.json()).then(list=>{
 list.forEach(g=>{
 const d=document.createElement('div');
 d.className='gameItem';
-d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
-d.onclick=()=>{state.p1.game=g;save();};
-gl.appendChild(d);
+d.innerHTML=`<img src="${fixImg(g.img)}"><div>${g.name}</div>`;
+d.onclick=()=>{state.p1.game=g;localStorage.setItem('tornelios',JSON.stringify(state));render();};
+gameList.appendChild(d);
 });
 });
 
-document.getElementById('save').onclick=()=>{
-state.spin=parseFloat(spin.value)||state.spin;
-state.p1.name=p1name.value||state.p1.name;
-state.p2.name=p2name.value||state.p2.name;
-state[who.value].wins[which.value]=parseFloat(win.value)||0;
-save();
+save.onclick=()=>{
+state.buy=parseFloat(buyCost.value)||state.buy;
+state.p1.name=p1NameIn.value||state.p1.name;
+state.p2.name=p2NameIn.value||state.p2.name;
+const p=who.value;
+state[p].wins[which.value]=parseFloat(win.value)||0;
+localStorage.setItem('tornelios',JSON.stringify(state));
+render();
 };
 }
-
-function save(){localStorage.setItem(LS,JSON.stringify(state));render();}
-function toggle(id){const p=document.getElementById(id);p.style.display=p.style.display?'':'block';}
 </script>
 </body>
 </html>
