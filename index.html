@@ -132,7 +132,9 @@
       overflow:hidden;
       position:relative;
       height:170px; /* balanced size */
-      box-shadow:
+      box-shadow:0 0 18px rgba(56,189,248,.35), inset 0 0 25px rgba(14,165,255,.18);
+      transform: translateZ(0);
+    }
 
     /* animated shine */
     .gameCard::after{
@@ -177,12 +179,14 @@
       width:100%;
       height:100%;
       object-fit:contain;
-      padding:12px;
+      padding:14px; /* ensures logos fit fully */
       display:block;
       filter:saturate(1.08) contrast(1.05);
-      transform:none;
-      transition: transform .25s ease, filter .25s ease;
+      transition: filter .25s ease;
+      position:relative;
+      z-index:0;
     }
+    .gameCard:hover img{ filter:saturate(1.15) contrast(1.1); }
     .gameCard:hover img{ transform: scale(1.03); filter:saturate(1.15) contrast(1.08); }
     .gameCard:hover img{ transform: scale(.82); filter:saturate(1.15) contrast(1.08); }
 
@@ -429,7 +433,7 @@
     <span class="particle" style="left:86%; top:91%"></span>
   </div>
 
-  <div class="header">TORNELIOS</div>
+  <div class="header">🏆 🎰 TORNELIOS 🎰 🏆</div>
 
   <div class="adminBtns" id="adminBtns">
     <button class="adminBtn" id="gamesBtn" title="Games">🎰</button>
@@ -471,35 +475,6 @@
         <div class="miniPill"><span>BUY 2</span><strong id="p2Buy2_top">£0</strong></div>
         <div class="miniPill"><span>TOTAL</span><strong id="p2Win_top">£0</strong></div>
         <div class="miniPill"><span>MULTI</span><strong id="p2Multi_top">0x</strong></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- bottom (still present): BUY 1 / BUY 2 / TOTAL / MULTI -->
-  <div class="bottomStats">
-    <div class="scoreGrid">
-      <div class="scoreBox">
-        <div class="scoreTitle">TOTAL</div>
-        <div class="scoreValue" id="p1Total">£0</div>
-        <div class="scoreMini">
-          <div class="miniPill"><span>BUY 1</span><strong id="p1Buy1">£0</strong></div>
-          <div class="miniPill"><span>BUY 2</span><strong id="p1Buy2">£0</strong></div>
-          <div class="miniPill"><span>TOTAL</span><strong id="p1WinTotal">£0</strong></div>
-          <div class="miniPill"><span>MULTI</span><strong id="p1Multi">0x</strong></div>
-        </div>
-      </div>
-
-      <div class="scoreVS"><div class="vsBig">VS</div></div>
-
-      <div class="scoreBox">
-        <div class="scoreTitle">TOTAL</div>
-        <div class="scoreValue" id="p2Total">£0</div>
-        <div class="scoreMini">
-          <div class="miniPill"><span>BUY 1</span><strong id="p2Buy1">£0</strong></div>
-          <div class="miniPill"><span>BUY 2</span><strong id="p2Buy2">£0</strong></div>
-          <div class="miniPill"><span>TOTAL</span><strong id="p2WinTotal">£0</strong></div>
-          <div class="miniPill"><span>MULTI</span><strong id="p2Multi">0x</strong></div>
-        </div>
       </div>
     </div>
   </div>
