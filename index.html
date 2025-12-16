@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TORNELIOS Widget</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
@@ -14,66 +14,44 @@
   --border:rgba(56,189,248,.25);
   --text:#e5f3ff;
 }
-
 *{box-sizing:border-box}
 body{margin:0;background:transparent;font-family:Inter,system-ui}
 
 .widget{
   width:720px;
-  background:linear-gradient(180deg,#041b3d,#020617);
-  border-radius:22px;
+  background:linear-gradient(180deg,var(--panel),var(--bg));
   border:1px solid var(--border);
-  overflow:hidden;
+  border-radius:22px;
   color:var(--text);
-  box-shadow:0 0 40px rgba(14,165,255,.25);
+  overflow:hidden;
+  position:relative;
 }
 
-/* HEADER */
 .header{
-  padding:14px;
   text-align:center;
+  padding:14px;
   font-size:22px;
   font-weight:1200;
-  letter-spacing:1px;
-  background:linear-gradient(90deg,#032e6b,var(--blue2));
-  text-shadow:0 0 18px rgba(56,189,248,.9);
+  background:linear-gradient(90deg,#022c5c,var(--blue2));
+  text-shadow:0 0 20px rgba(56,189,248,.9);
 }
 
-/* ADMIN BUTTONS */
-.adminBtns{
-  position:absolute;
-  top:10px;
-  right:10px;
-  display:none;
-  gap:6px;
-}
-.adminBtn{
-  width:30px;height:30px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:#020617;
-  color:var(--blue);
-  cursor:pointer;
-}
-
-/* GAMES */
 .gamesRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  gap:12px;
-  padding:14px;
+  gap:10px;
+  padding:12px;
 }
 
 .gameCard{
-  height:150px;
+  height:140px;
+  border-radius:16px;
   background:#020617;
-  border-radius:18px;
-  border:1px solid rgba(56,189,248,.3);
+  border:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:center;
 }
-
 .gameCard img{
   max-width:85%;
   max-height:85%;
@@ -84,23 +62,21 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
-  font-weight:1100;
+  font-weight:1000;
   color:var(--blue2);
 }
 
-/* PLAYERS */
 .playersRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  gap:12px;
-  padding:14px;
+  gap:10px;
+  padding:12px;
 }
 
 .player{
-  background:rgba(7,17,42,.7);
-  border-radius:18px;
-  border:1px solid rgba(56,189,248,.25);
+  border-radius:16px;
+  background:rgba(7,17,42,.8);
+  border:1px solid var(--border);
   padding:12px;
 }
 
@@ -111,22 +87,22 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   margin-bottom:8px;
 }
 
-.buys{
+.buyGrid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
 }
 
-.buy{
+.buyBox{
   background:#020617;
+  border:1px solid rgba(56,189,248,.18);
   border-radius:12px;
-  border:1px solid rgba(56,189,248,.2);
   padding:8px;
   text-align:center;
 }
 
-.buy strong{font-size:14px;display:block}
-.buy span{font-size:11px;opacity:.8}
+.buyBox strong{display:block;font-size:14px}
+.buyBox span{font-size:11px;opacity:.8}
 
 .total{
   grid-column:1/3;
@@ -137,7 +113,10 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   text-shadow:0 0 12px rgba(56,189,248,.9);
 }
 
-/* ADMIN PANELS */
+/* ADMIN */
+.adminBtns{position:absolute;top:8px;right:8px;display:none;gap:6px}
+.adminBtn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:#041026;color:var(--blue);cursor:pointer}
+
 .panel{
   display:none;
   position:absolute;
@@ -148,48 +127,15 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   border:1px solid var(--border);
   border-radius:14px;
   padding:12px;
-  z-index:50;
+  z-index:100;
 }
+.panel h3{margin:0 0 8px;color:var(--blue)}
+.panel input,.panel select{width:100%;margin-bottom:8px;padding:8px;border-radius:10px;border:1px solid var(--border);background:#041026;color:#fff}
+.panel button{width:100%;padding:10px;border-radius:10px;border:none;background:var(--blue2);font-weight:1000}
 
-.panel h3{
-  margin:0 0 8px;
-  color:var(--blue);
-}
-
-.panel input,.panel select{
-  width:100%;
-  padding:8px;
-  margin-bottom:8px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#041026;
-  color:#fff;
-}
-
-.panel button{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:var(--blue2);
-  font-weight:1000;
-  cursor:pointer;
-}
-
-.gameList{
-  max-height:260px;
-  overflow:auto;
-  border:1px solid rgba(56,189,248,.2);
-  border-radius:10px;
-}
-
-.gameItem{
-  display:flex;
-  gap:8px;
-  padding:6px;
-  cursor:pointer;
-}
-.gameItem img{width:44px;height:26px;object-fit:contain}
+.gameList{max-height:260px;overflow:auto;border:1px solid rgba(56,189,248,.18);border-radius:10px}
+.gameItem{display:flex;gap:8px;padding:6px;cursor:pointer}
+.gameItem img{width:40px;height:24px;object-fit:contain}
 .gameItem:hover{background:rgba(56,189,248,.1)}
 </style>
 </head>
@@ -212,9 +158,9 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   <div class="playersRow">
     <div class="player">
       <div class="playerName" id="p1Name">Player 1</div>
-      <div class="buys">
-        <div class="buy"><strong id="p1b1">£0</strong><span id="p1m1">0x</span></div>
-        <div class="buy"><strong id="p1b2">£0</strong><span id="p1m2">0x</span></div>
+      <div class="buyGrid">
+        <div class="buyBox"><strong id="p1w1">£0</strong><span id="p1m1">0x</span></div>
+        <div class="buyBox"><strong id="p1w2">£0</strong><span id="p1m2">0x</span></div>
         <div class="total" id="p1t">£0</div>
       </div>
     </div>
@@ -223,9 +169,9 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
 
     <div class="player">
       <div class="playerName" id="p2Name">Player 2</div>
-      <div class="buys">
-        <div class="buy"><strong id="p2b1">£0</strong><span id="p2m1">0x</span></div>
-        <div class="buy"><strong id="p2b2">£0</strong><span id="p2m2">0x</span></div>
+      <div class="buyGrid">
+        <div class="buyBox"><strong id="p2w1">£0</strong><span id="p2m1">0x</span></div>
+        <div class="buyBox"><strong id="p2w2">£0</strong><span id="p2m2">0x</span></div>
         <div class="total" id="p2t">£0</div>
       </div>
     </div>
@@ -234,29 +180,17 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
   <!-- ADMIN PANELS -->
   <div class="panel" id="gamesPanel">
     <h3>Games</h3>
-    <select id="assignTo">
-      <option value="p1">Assign to Player 1</option>
-      <option value="p2">Assign to Player 2</option>
-    </select>
     <div class="gameList" id="gameList"></div>
   </div>
 
   <div class="panel" id="calcPanel">
     <h3>Admin</h3>
-    <input id="name1" placeholder="Player 1 name">
-    <input id="name2" placeholder="Player 2 name">
-
-    <input id="buyCost" type="number" step="0.01" placeholder="Bonus buy cost (e.g. 80)">
-    <select id="who">
-      <option value="p1">Player 1</option>
-      <option value="p2">Player 2</option>
-    </select>
-    <select id="which">
-      <option value="0">Buy 1</option>
-      <option value="1">Buy 2</option>
-    </select>
-    <input id="win" type="number" step="0.01" placeholder="Win amount">
-
+    <input id="p1name" placeholder="Player 1 name">
+    <input id="p2name" placeholder="Player 2 name">
+    <input id="spin" type="number" step="0.01" placeholder="Spin bet (e.g. 0.40)">
+    <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
+    <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
+    <input id="win" type="number" step="0.01" placeholder="Win">
     <button id="save">Save</button>
   </div>
 </div>
@@ -265,82 +199,52 @@ body{margin:0;background:transparent;font-family:Inter,system-ui}
 const isAdmin=new URLSearchParams(location.search).has('admin');
 if(isAdmin)document.getElementById('adminBtns').style.display='flex';
 
-const LS='tornelios_final_v2';
-let state=JSON.parse(localStorage.getItem(LS)||JSON.stringify({
-  buyCost:0,
-  p1:{name:'Player 1',wins:[0,0],game:null},
-  p2:{name:'Player 2',wins:[0,0],game:null}
-}));
-
-function placeholder(text){
-  return `data:image/svg+xml;utf8,
-  <svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>
-    <rect width='100%' height='100%' fill='#020617'/>
-    <text x='50%' y='50%' fill='#38bdf8' font-size='24'
-      dominant-baseline='middle' text-anchor='middle'
-      font-family='Arial'>${text}</text>
-  </svg>`;
-}
+const LS='tornelios_state';
+let state=JSON.parse(localStorage.getItem(LS)||'{"spin":0.4,"p1":{"name":"Player 1","wins":[0,0],"game":null},"p2":{"name":"Player 2","wins":[0,0],"game":null}}');
 
 function render(){
-  ['1','2'].forEach(p=>{
-    const s=state['p'+p];
-    document.getElementById('p'+p+'Name').textContent=s.name;
-
-    const total=s.wins[0]+s.wins[1];
-    document.getElementById('p'+p+'b1').textContent='£'+s.wins[0];
-    document.getElementById('p'+p+'b2').textContent='£'+s.wins[1];
-    document.getElementById('p'+p+'m1').textContent=state.buyCost?((s.wins[0]/state.buyCost).toFixed(2)+'x'):'0x';
-    document.getElementById('p'+p+'m2').textContent=state.buyCost?((s.wins[1]/state.buyCost).toFixed(2)+'x'):'0x';
-    document.getElementById('p'+p+'t').textContent='£'+total;
-
-    const img=document.getElementById('g'+p);
-    img.src=s.game?s.game.img:placeholder('Select Game');
-  });
+['1','2'].forEach(p=>{
+const s=state['p'+p];
+document.getElementById('p'+p+'Name').textContent=s.name;
+const t=s.wins[0]+s.wins[1];
+document.getElementById('p'+p+'w1').textContent='£'+s.wins[0];
+document.getElementById('p'+p+'w2').textContent='£'+s.wins[1];
+document.getElementById('p'+p+'m1').textContent=(s.wins[0]/state.spin||0).toFixed(1)+'x';
+document.getElementById('p'+p+'m2').textContent=(s.wins[1]/state.spin||0).toFixed(1)+'x';
+document.getElementById('p'+p+'t').textContent='£'+t;
+if(s.game)document.getElementById('g'+p).src=s.game.img;
+});
 }
 render();
 
-/* ADMIN */
 if(isAdmin){
-  document.getElementById('gamesBtn').onclick=()=>toggle('gamesPanel');
-  document.getElementById('calcBtn').onclick=()=>toggle('calcPanel');
+document.getElementById('gamesBtn').onclick=()=>toggle('gamesPanel');
+document.getElementById('calcBtn').onclick=()=>toggle('calcPanel');
 
-  function toggle(id){
-    document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
-    document.getElementById(id).style.display='block';
-  }
+fetch('./games.json?'+Date.now())
+.then(r=>r.json())
+.then(list=>{
+const gl=document.getElementById('gameList');
+list.forEach(g=>{
+const d=document.createElement('div');
+d.className='gameItem';
+d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
+d.onclick=()=>{state.p1.game=g;save();};
+gl.appendChild(d);
+});
+});
 
-  fetch('./games.json?'+Date.now())
-    .then(r=>r.json())
-    .then(list=>{
-      const gl=document.getElementById('gameList');
-      list.forEach(g=>{
-        const d=document.createElement('div');
-        d.className='gameItem';
-        d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
-        d.onclick=()=>{
-          const who=document.getElementById('assignTo').value;
-          state[who].game=g;
-          localStorage.setItem(LS,JSON.stringify(state));
-          render();
-        };
-        gl.appendChild(d);
-      });
-    });
-
-  document.getElementById('save').onclick=()=>{
-    state.p1.name=document.getElementById('name1').value||state.p1.name;
-    state.p2.name=document.getElementById('name2').value||state.p2.name;
-    state.buyCost=parseFloat(document.getElementById('buyCost').value)||state.buyCost;
-
-    const p=document.getElementById('who').value;
-    const i=parseInt(document.getElementById('which').value);
-    state[p].wins[i]=parseFloat(document.getElementById('win').value)||0;
-
-    localStorage.setItem(LS,JSON.stringify(state));
-    render();
-  };
+document.getElementById('save').onclick=()=>{
+state.spin=parseFloat(spin.value)||state.spin;
+state.p1.name=p1name.value||state.p1.name;
+state.p2.name=p2name.value||state.p2.name;
+state[who.value].wins[which.value]=parseFloat(win.value)||0;
+save();
+};
 }
+
+function save(){localStorage.setItem(LS,JSON.stringify(state));render();}
+function toggle(id){const p=document.getElementById(id);p.style.display=p.style.display?'':'block';}
 </script>
 </body>
 </html>
