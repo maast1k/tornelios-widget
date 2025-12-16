@@ -122,9 +122,9 @@
     /* top games */
     .gamesRow{
       display:grid;
-      grid-template-columns: 1fr 60px 1fr;
+      grid-template-columns: 1fr 56px 1fr;
       gap: 10px;
-      padding: 12px;
+      padding: 10px 12px;
       align-items: stretch;
       position:relative;
       z-index:1;
@@ -196,13 +196,13 @@
       width:100%;
       height:100%;
       object-fit:contain;
-      padding:14px; /* tighter like initial */
+      padding:12px;
       display:block;
-      filter:saturate(1.05) contrast(1.04);
-      transform: scale(.68); /* small logo like original */
-      transform-origin:center;
+      filter:saturate(1.08) contrast(1.05);
+      transform:none;
       transition: transform .25s ease, filter .25s ease;
     }
+    .gameCard:hover img{ transform: scale(1.03); filter:saturate(1.15) contrast(1.08); }
     }
     .gameCard:hover img{
       transform: scale(.72);
@@ -250,6 +250,7 @@
       position:relative;
       z-index:1;
     }
+
     @keyframes vsPulse{
       0%,100%{ filter: brightness(1); transform: translateY(0); }
       50%{ filter: brightness(1.15); transform: translateY(-1px); }
@@ -274,6 +275,37 @@
       border-radius: 14px;
       padding: 10px 12px;
       box-shadow: inset 0 0 18px rgba(14,165,255,.12);
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+    }
+
+    .playerStats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .playerStats .stat{
+      background: rgba(2,6,23,.55);
+      border: 1px solid rgba(56,189,248,.18);
+      border-radius: 12px;
+      padding: 8px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .playerStats .stat span{
+      font-size:10px;
+      opacity:.8;
+      font-weight:1000;
+      letter-spacing:.25px;
+    }
+    .playerStats .stat strong{
+      font-size:12px;
+      font-weight:1100;
+      color:#fff;
+      text-shadow:0 0 10px rgba(56,189,248,.85);
     }
 
     .playerTop{display:flex;align-items:center;justify-content:center;}
@@ -563,11 +595,16 @@
       <div class="playerTop">
         <div class="playerName" id="p1Name">Maast1k</div>
       </div>
+      <div class="playerStats">
+        <div class="stat"><span>BUY 1</span><strong id="p1Buy1">£0</strong></div>
+        <div class="stat"><span>BUY 2</span><strong id="p1Buy2">£0</strong></div>
+        <div class="stat"><span>WIN</span><strong id="p1WinTotal">£0</strong></div>
+        <div class="stat"><span>MULTI</span><strong id="p1Multi">0x</strong></div>
+      </div>
     </div>
 
     <div class="centerVS">
       <div class="vsBig">VS</div>
-      <div class="mini">2 BUYS / PLAYER</div>
     </div>
 
     <div class="playerCard">
@@ -577,39 +614,7 @@
     </div>
   </div>
 
-  <!-- bottom: BUY 1 / BUY 2 / TOTAL / MULTI (styled like your sketch) -->
-  <div class="bottomStats">
-    <div class="scoreGrid">
-      <div class="scoreBox">
-        <div class="scoreTitle" id="p1ScoreTitle">TOTAL</div>
-        <div class="scoreValue" id="p1Total">£0</div>
-        <div class="scoreMini">
-          <div class="miniPill"><span>BUY 1</span><strong id="p1Buy1">£0</strong></div>
-          <div class="miniPill"><span>BUY 2</span><strong id="p1Buy2">£0</strong></div>
-          <div class="miniPill"><span>WIN</span><strong id="p1WinTotal">£0</strong></div>
-          <div class="miniPill"><span>MULTI</span><strong id="p1Multi">0x</strong></div>
-        </div>
-      </div>
-
-      <div class="scoreVS">
-        <div class="vsBig">VS</div>
-        <div class="mini">2 BUYS</div>
-      </div>
-
-      <div class="scoreBox">
-        <div class="scoreTitle" id="p2ScoreTitle">TOTAL</div>
-        <div class="scoreValue" id="p2Total">£0</div>
-        <div class="scoreMini">
-          <div class="miniPill"><span>BUY 1</span><strong id="p2Buy1">£0</strong></div>
-          <div class="miniPill"><span>BUY 2</span><strong id="p2Buy2">£0</strong></div>
-          <div class="miniPill"><span>WIN</span><strong id="p2WinTotal">£0</strong></div>
-          <div class="miniPill"><span>MULTI</span><strong id="p2Multi">0x</strong></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>
+  <div class="footer">Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>Twitch 1v1 slot tournament overlay • Admin hidden unless ?admin=1</div>
 
   <!-- ADMIN: GAMES -->
   <div class="panel" id="gamesPanel">
@@ -733,8 +738,6 @@
   const p1Total = document.getElementById('p1Total');
   const p2Total = document.getElementById('p2Total');
 
-  const p1Who = document.getElementById('p1Who');
-  const p2Who = document.getElementById('p2Who');
   const p1Buy1 = document.getElementById('p1Buy1');
   const p1Buy2 = document.getElementById('p1Buy2');
   const p1WinTotal = document.getElementById('p1WinTotal');
@@ -810,9 +813,6 @@
   function render(){
     bump(p1Name, state.p1.name);
     bump(p2Name, state.p2.name);
-    bump(p1Who, state.p1.name);
-    bump(p2Who, state.p2.name);
-
     const c1 = calc(state.p1);
     const c2 = calc(state.p2);
 
@@ -911,7 +911,7 @@
     gameListEl.innerHTML = '';
     const frag = document.createDocumentFragment();
 
-    const maxRender = 300;
+    const maxRender = allGames.length;
     items.slice(0, maxRender).forEach(g => {
       const div = document.createElement('div');
       div.className = 'gameItem';
