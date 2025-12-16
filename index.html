@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
 <title>TORNELIOS Widget</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
 :root{
@@ -14,48 +14,40 @@
   --border:rgba(56,189,248,.25);
   --text:#e5f3ff;
 }
-
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:transparent;
-  font-family:Inter,system-ui,-apple-system,sans-serif;
-}
+body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
 .widget{
   width:720px;
   background:linear-gradient(180deg,var(--panel),var(--bg));
-  border:1px solid var(--border);
   border-radius:22px;
-  color:var(--text);
+  border:1px solid var(--border);
   overflow:hidden;
-  position:relative;
+  color:var(--text);
+  box-shadow:0 0 40px rgba(14,165,255,.25);
 }
 
-/* HEADER */
 .header{
   padding:14px;
   text-align:center;
-  font-size:22px;
   font-weight:1200;
-  letter-spacing:1px;
+  font-size:22px;
   background:linear-gradient(90deg,#021b3a,var(--blue2));
   text-shadow:0 0 18px rgba(56,189,248,.9);
 }
 
-/* GAME ROW */
 .gamesRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  gap:10px;
-  padding:12px;
+  gap:12px;
+  padding:14px;
 }
 
 .gameCard{
-  height:130px;
+  height:160px;
   background:#020617;
-  border:1px solid rgba(56,189,248,.3);
   border-radius:18px;
+  border:1px solid rgba(56,189,248,.3);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -71,67 +63,45 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-weight:1000;
+  font-weight:1100;
   font-size:18px;
   color:var(--blue2);
 }
 
-/* PLAYERS */
 .playersRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  gap:10px;
-  padding:12px;
+  gap:12px;
+  padding:14px;
 }
 
 .player{
-  background:rgba(7,17,42,.7);
+  background:rgba(7,17,42,.75);
   border:1px solid rgba(56,189,248,.25);
   border-radius:18px;
-  padding:10px;
+  padding:12px;
 }
 
 .playerName{
   text-align:center;
   font-weight:1100;
-  font-size:16px;
-  margin-bottom:6px;
-}
-
-.buys{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.buyBox{
-  background:rgba(2,6,23,.7);
-  border:1px solid rgba(56,189,248,.18);
-  border-radius:12px;
-  padding:8px;
-  text-align:center;
-}
-
-.buyBox strong{
-  display:block;
-  font-size:14px;
-}
-
-.buyBox span{
-  font-size:11px;
-  opacity:.75;
+  margin-bottom:10px;
 }
 
 .total{
-  grid-column:1/3;
-  margin-top:6px;
   text-align:center;
   font-size:20px;
   font-weight:1200;
-  text-shadow:0 0 12px rgba(56,189,248,.9);
+  text-shadow:0 0 14px rgba(56,189,248,.9);
 }
 
-/* ADMIN */
+.multi{
+  text-align:center;
+  font-size:13px;
+  opacity:.9;
+  margin-top:4px;
+}
+
 .adminBtns{
   position:absolute;
   top:8px;
@@ -169,10 +139,10 @@ body{
   color:var(--blue);
 }
 
-.panel input,.panel select{
+.panel input,.panel select,.panel button{
   width:100%;
-  padding:8px;
   margin-bottom:8px;
+  padding:8px;
   border-radius:10px;
   border:1px solid var(--border);
   background:#041026;
@@ -180,10 +150,6 @@ body{
 }
 
 .panel button{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
   background:var(--blue2);
   font-weight:1000;
   cursor:pointer;
@@ -202,7 +168,6 @@ body{
   padding:6px;
   cursor:pointer;
 }
-
 .gameItem img{
   width:40px;
   height:24px;
@@ -222,106 +187,116 @@ body{
     <button class="adminBtn" id="calcBtn">🧮</button>
   </div>
 
-  <!-- GAMES -->
   <div class="gamesRow">
     <div class="gameCard"><img id="g1"></div>
     <div class="vs">VS</div>
     <div class="gameCard"><img id="g2"></div>
   </div>
 
-  <!-- PLAYERS -->
   <div class="playersRow">
     <div class="player">
       <div class="playerName" id="p1Name">Player 1</div>
-      <div class="buys">
-        <div class="buyBox"><strong id="p1b1">£0</strong><span id="p1m1">0x</span></div>
-        <div class="buyBox"><strong id="p1b2">£0</strong><span id="p1m2">0x</span></div>
-        <div class="total" id="p1t">£0</div>
-      </div>
+      <div class="total" id="p1Total">£0</div>
+      <div class="multi" id="p1Multi">0x</div>
     </div>
 
     <div class="vs">VS</div>
 
     <div class="player">
       <div class="playerName" id="p2Name">Player 2</div>
-      <div class="buys">
-        <div class="buyBox"><strong id="p2b1">£0</strong><span id="p2m1">0x</span></div>
-        <div class="buyBox"><strong id="p2b2">£0</strong><span id="p2m2">0x</span></div>
-        <div class="total" id="p2t">£0</div>
-      </div>
+      <div class="total" id="p2Total">£0</div>
+      <div class="multi" id="p2Multi">0x</div>
     </div>
   </div>
 
-  <!-- ADMIN PANELS -->
+  <!-- ADMIN -->
   <div class="panel" id="gamesPanel">
     <h3>Games</h3>
     <div class="gameList" id="gameList"></div>
   </div>
 
   <div class="panel" id="calcPanel">
-    <h3>Admin</h3>
+    <h3>Calculator</h3>
     <input id="p1NameIn" placeholder="Player 1 name">
     <input id="p2NameIn" placeholder="Player 2 name">
+
     <input id="buyCost" type="number" step="0.01" placeholder="Buy cost (e.g. 80)">
-    <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
-    <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
-    <input id="win" type="number" step="0.01" placeholder="Win">
+
+    <select id="who">
+      <option value="p1">Player 1</option>
+      <option value="p2">Player 2</option>
+    </select>
+
+    <select id="which">
+      <option value="0">Buy 1</option>
+      <option value="1">Buy 2</option>
+    </select>
+
+    <input id="win" type="number" step="0.01" placeholder="Win amount">
+
     <button id="save">Save</button>
   </div>
 
 </div>
 
 <script>
-const isAdmin=new URLSearchParams(location.search).has('admin');
-if(isAdmin)document.getElementById('adminBtns').style.display='flex';
+const isAdmin = new URLSearchParams(location.search).has('admin');
+if(isAdmin) document.getElementById('adminBtns').style.display='flex';
 
-let state=JSON.parse(localStorage.getItem('tornelios_state')||JSON.stringify({
-  buyCost:80,
-  p1:{name:"Player 1",wins:[0,0],game:null},
-  p2:{name:"Player 2",wins:[0,0],game:null}
+let state = JSON.parse(localStorage.getItem('tornelios_state') || JSON.stringify({
+  buy:0,
+  p1:{name:'Player 1',wins:[0,0],game:null},
+  p2:{name:'Player 2',wins:[0,0],game:null}
 }));
 
 function render(){
-  ["1","2"].forEach(p=>{
-    const s=state["p"+p];
-    document.getElementById("p"+p+"Name").textContent=s.name;
-    const t=s.wins[0]+s.wins[1];
-    document.getElementById("p"+p+"b1").textContent="£"+s.wins[0];
-    document.getElementById("p"+p+"b2").textContent="£"+s.wins[1];
-    document.getElementById("p"+p+"m1").textContent=((s.wins[0]/state.buyCost)||0).toFixed(2)+"x";
-    document.getElementById("p"+p+"m2").textContent=((s.wins[1]/state.buyCost)||0).toFixed(2)+"x";
-    document.getElementById("p"+p+"t").textContent="£"+t;
-    if(s.game)document.getElementById("g"+p).src=s.game.img;
+  ['1','2'].forEach(p=>{
+    const s=state['p'+p];
+    const total=s.wins[0]+s.wins[1];
+    const multi=state.buy>0 ? (total/state.buy).toFixed(2):'0';
+
+    document.getElementById('p'+p+'Name').textContent=s.name;
+    document.getElementById('p'+p+'Total').textContent='£'+total;
+    document.getElementById('p'+p+'Multi').textContent=multi+'x';
+
+    if(s.game) document.getElementById('g'+p).src=s.game.img;
   });
 }
 render();
 
-/* ADMIN */
 if(isAdmin){
-  const gamesPanel=document.getElementById("gamesPanel");
-  const calcPanel=document.getElementById("calcPanel");
-  gamesBtn.onclick=()=>gamesPanel.style.display=gamesPanel.style.display?"":"block";
-  calcBtn.onclick=()=>calcPanel.style.display=calcPanel.style.display?"":"block";
+  const gamesBtn=gamesBtn=document.getElementById('gamesBtn');
+  const calcBtn=document.getElementById('calcBtn');
+  const gamesPanel=document.getElementById('gamesPanel');
+  const calcPanel=document.getElementById('calcPanel');
 
-  fetch("./games.json").then(r=>r.json()).then(list=>{
-    const gl=document.getElementById("gameList");
+  gamesBtn.onclick=()=>gamesPanel.style.display=gamesPanel.style.display?'':'block';
+  calcBtn.onclick=()=>calcPanel.style.display=calcPanel.style.display?'':'block';
+
+  fetch('./games.json').then(r=>r.json()).then(list=>{
+    const gl=document.getElementById('gameList');
     list.forEach(g=>{
-      const d=document.createElement("div");
-      d.className="gameItem";
+      const d=document.createElement('div');
+      d.className='gameItem';
       d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
-      d.onclick=()=>{state.p1.game=g;localStorage.setItem("tornelios_state",JSON.stringify(state));render();};
+      d.onclick=()=>{state.p1.game=g;save()};
       gl.appendChild(d);
     });
   });
 
-  save.onclick=()=>{
+  document.getElementById('save').onclick=()=>{
+    state.buy=parseFloat(buyCost.value)||state.buy;
     state.p1.name=p1NameIn.value||state.p1.name;
     state.p2.name=p2NameIn.value||state.p2.name;
-    state.buyCost=parseFloat(buyCost.value)||state.buyCost;
-    state[who.value].wins[parseInt(which.value)]=parseFloat(win.value)||0;
-    localStorage.setItem("tornelios_state",JSON.stringify(state));
-    render();
+    const p=who.value;
+    state[p].wins[+which.value]=parseFloat(win.value)||0;
+    save();
   };
+}
+
+function save(){
+  localStorage.setItem('tornelios_state',JSON.stringify(state));
+  render();
 }
 </script>
 </body>
