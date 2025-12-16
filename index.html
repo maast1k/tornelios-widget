@@ -2,57 +2,81 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TORNELIOS Widget</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 :root{
   --bg:#020617;
-  --panel:#020f2e;
+  --panel:#041026;
   --blue:#38bdf8;
   --blue2:#0ea5ff;
   --border:rgba(56,189,248,.25);
   --text:#e5f3ff;
 }
+
 *{box-sizing:border-box}
-body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
+body{margin:0;background:transparent;font-family:Inter,system-ui}
 
 .widget{
   width:720px;
-  background:linear-gradient(180deg,var(--panel),var(--bg));
+  background:linear-gradient(180deg,#041b3d,#020617);
+  border-radius:22px;
   border:1px solid var(--border);
-  border-radius:20px;
-  color:var(--text);
   overflow:hidden;
+  color:var(--text);
+  box-shadow:0 0 40px rgba(14,165,255,.25);
 }
 
+/* HEADER */
 .header{
-  text-align:center;
   padding:14px;
+  text-align:center;
   font-size:22px;
   font-weight:1200;
-  background:linear-gradient(90deg,#021b3a,var(--blue2));
+  letter-spacing:1px;
+  background:linear-gradient(90deg,#032e6b,var(--blue2));
   text-shadow:0 0 18px rgba(56,189,248,.9);
 }
-.header span{margin:0 6px}
 
-.games{
+/* ADMIN BUTTONS */
+.adminBtns{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:none;
+  gap:6px;
+}
+.adminBtn{
+  width:30px;height:30px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:#020617;
+  color:var(--blue);
+  cursor:pointer;
+}
+
+/* GAMES */
+.gamesRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  padding:12px;
-  gap:10px;
+  gap:12px;
+  padding:14px;
 }
-.game{
+
+.gameCard{
+  height:150px;
   background:#020617;
-  border:1px solid var(--border);
-  border-radius:14px;
-  height:130px;
+  border-radius:18px;
+  border:1px solid rgba(56,189,248,.3);
   display:flex;
   align-items:center;
   justify-content:center;
 }
-.game img{
-  max-width:90%;
-  max-height:90%;
+
+.gameCard img{
+  max-width:85%;
+  max-height:85%;
   object-fit:contain;
 }
 
@@ -61,27 +85,30 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   align-items:center;
   justify-content:center;
   font-size:20px;
-  font-weight:1000;
+  font-weight:1100;
   color:var(--blue2);
 }
 
-.players{
+/* PLAYERS */
+.playersRow{
   display:grid;
   grid-template-columns:1fr 60px 1fr;
-  padding:12px;
-  gap:10px;
+  gap:12px;
+  padding:14px;
 }
 
 .player{
-  background:rgba(7,17,42,.8);
-  border:1px solid var(--border);
-  border-radius:16px;
+  background:rgba(7,17,42,.7);
+  border-radius:18px;
+  border:1px solid rgba(56,189,248,.25);
   padding:12px;
 }
 
-.player h3{
+.playerName{
   text-align:center;
-  margin:0 0 8px;
+  font-size:16px;
+  font-weight:1100;
+  margin-bottom:8px;
 }
 
 .buys{
@@ -92,40 +119,25 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
 .buy{
   background:#020617;
-  border:1px solid rgba(56,189,248,.18);
   border-radius:12px;
+  border:1px solid rgba(56,189,248,.2);
   padding:8px;
   text-align:center;
 }
+
 .buy strong{font-size:14px;display:block}
 .buy span{font-size:11px;opacity:.8}
 
 .total{
   grid-column:1/3;
   margin-top:6px;
-  text-align:center;
   font-size:18px;
   font-weight:1200;
-  text-shadow:0 0 12px rgba(56,189,248,.8);
+  text-align:center;
+  text-shadow:0 0 12px rgba(56,189,248,.9);
 }
 
-/* ADMIN */
-.adminBtns{
-  position:absolute;
-  top:8px;
-  right:8px;
-  display:none;
-  gap:6px;
-}
-.adminBtn{
-  width:28px;height:28px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:#041026;
-  color:var(--blue);
-  cursor:pointer;
-}
-
+/* ADMIN PANELS */
 .panel{
   display:none;
   position:absolute;
@@ -138,16 +150,22 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   padding:12px;
   z-index:50;
 }
-.panel h4{margin:0 0 8px;color:var(--blue)}
-.panel input, .panel select{
+
+.panel h3{
+  margin:0 0 8px;
+  color:var(--blue);
+}
+
+.panel input,.panel select{
   width:100%;
-  margin-bottom:8px;
   padding:8px;
+  margin-bottom:8px;
   border-radius:10px;
   border:1px solid var(--border);
   background:#041026;
   color:#fff;
 }
+
 .panel button{
   width:100%;
   padding:10px;
@@ -155,47 +173,45 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   border:none;
   background:var(--blue2);
   font-weight:1000;
+  cursor:pointer;
 }
 
 .gameList{
   max-height:260px;
   overflow:auto;
-  border:1px solid var(--border);
+  border:1px solid rgba(56,189,248,.2);
   border-radius:10px;
 }
+
 .gameItem{
   display:flex;
   gap:8px;
   padding:6px;
   cursor:pointer;
 }
-.gameItem img{
-  width:40px;
-  height:24px;
-  object-fit:contain;
-}
+.gameItem img{width:44px;height:26px;object-fit:contain}
 .gameItem:hover{background:rgba(56,189,248,.1)}
 </style>
 </head>
-<body>
 
+<body>
 <div class="widget">
-  <div class="header">🏆 <span>TORNELIOS</span> 🎰</div>
+  <div class="header">🏆 TORNELIOS 🎰</div>
 
   <div class="adminBtns" id="adminBtns">
     <button class="adminBtn" id="gamesBtn">🎰</button>
     <button class="adminBtn" id="calcBtn">🧮</button>
   </div>
 
-  <div class="games">
-    <div class="game"><img id="g1"></div>
+  <div class="gamesRow">
+    <div class="gameCard"><img id="g1"></div>
     <div class="vs">VS</div>
-    <div class="game"><img id="g2"></div>
+    <div class="gameCard"><img id="g2"></div>
   </div>
 
-  <div class="players">
+  <div class="playersRow">
     <div class="player">
-      <h3 id="p1Name">Player 1</h3>
+      <div class="playerName" id="p1Name">Player 1</div>
       <div class="buys">
         <div class="buy"><strong id="p1b1">£0</strong><span id="p1m1">0x</span></div>
         <div class="buy"><strong id="p1b2">£0</strong><span id="p1m2">0x</span></div>
@@ -206,7 +222,7 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
     <div class="vs">VS</div>
 
     <div class="player">
-      <h3 id="p2Name">Player 2</h3>
+      <div class="playerName" id="p2Name">Player 2</div>
       <div class="buys">
         <div class="buy"><strong id="p2b1">£0</strong><span id="p2m1">0x</span></div>
         <div class="buy"><strong id="p2b2">£0</strong><span id="p2m2">0x</span></div>
@@ -217,54 +233,84 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 
   <!-- ADMIN PANELS -->
   <div class="panel" id="gamesPanel">
-    <h4>Select Game (click assigns to P1, right-click P2)</h4>
+    <h3>Games</h3>
+    <select id="assignTo">
+      <option value="p1">Assign to Player 1</option>
+      <option value="p2">Assign to Player 2</option>
+    </select>
     <div class="gameList" id="gameList"></div>
   </div>
 
   <div class="panel" id="calcPanel">
-    <h4>Admin Controls</h4>
-    <input id="p1NameIn" placeholder="Player 1 name">
-    <input id="p2NameIn" placeholder="Player 2 name">
-    <input id="spinValue" type="number" step="0.01" placeholder="Spin value (e.g. 0.40)">
-    <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
-    <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
-    <input id="win" type="number" step="0.01" placeholder="Win">
+    <h3>Admin</h3>
+    <input id="name1" placeholder="Player 1 name">
+    <input id="name2" placeholder="Player 2 name">
+
+    <input id="buyCost" type="number" step="0.01" placeholder="Bonus buy cost (e.g. 80)">
+    <select id="who">
+      <option value="p1">Player 1</option>
+      <option value="p2">Player 2</option>
+    </select>
+    <select id="which">
+      <option value="0">Buy 1</option>
+      <option value="1">Buy 2</option>
+    </select>
+    <input id="win" type="number" step="0.01" placeholder="Win amount">
+
     <button id="save">Save</button>
   </div>
 </div>
 
 <script>
-const isAdmin = new URLSearchParams(location.search).has('admin');
-if(isAdmin) document.getElementById('adminBtns').style.display='flex';
+const isAdmin=new URLSearchParams(location.search).has('admin');
+if(isAdmin)document.getElementById('adminBtns').style.display='flex';
 
-let state = JSON.parse(localStorage.getItem('tornelios_state') || JSON.stringify({
-  spin:0.4,
+const LS='tornelios_final_v2';
+let state=JSON.parse(localStorage.getItem(LS)||JSON.stringify({
+  buyCost:0,
   p1:{name:'Player 1',wins:[0,0],game:null},
   p2:{name:'Player 2',wins:[0,0],game:null}
 }));
+
+function placeholder(text){
+  return `data:image/svg+xml;utf8,
+  <svg xmlns='http://www.w3.org/2000/svg' width='400' height='200'>
+    <rect width='100%' height='100%' fill='#020617'/>
+    <text x='50%' y='50%' fill='#38bdf8' font-size='24'
+      dominant-baseline='middle' text-anchor='middle'
+      font-family='Arial'>${text}</text>
+  </svg>`;
+}
 
 function render(){
   ['1','2'].forEach(p=>{
     const s=state['p'+p];
     document.getElementById('p'+p+'Name').textContent=s.name;
-    const t=s.wins[0]+s.wins[1];
+
+    const total=s.wins[0]+s.wins[1];
     document.getElementById('p'+p+'b1').textContent='£'+s.wins[0];
     document.getElementById('p'+p+'b2').textContent='£'+s.wins[1];
-    document.getElementById('p'+p+'m1').textContent=(s.wins[0]/state.spin||0).toFixed(1)+'x';
-    document.getElementById('p'+p+'m2').textContent=(s.wins[1]/state.spin||0).toFixed(1)+'x';
-    document.getElementById('p'+p+'t').textContent='£'+t;
-    if(s.game) document.getElementById('g'+p).src=s.game.img;
+    document.getElementById('p'+p+'m1').textContent=state.buyCost?((s.wins[0]/state.buyCost).toFixed(2)+'x'):'0x';
+    document.getElementById('p'+p+'m2').textContent=state.buyCost?((s.wins[1]/state.buyCost).toFixed(2)+'x'):'0x';
+    document.getElementById('p'+p+'t').textContent='£'+total;
+
+    const img=document.getElementById('g'+p);
+    img.src=s.game?s.game.img:placeholder('Select Game');
   });
 }
 render();
 
+/* ADMIN */
 if(isAdmin){
-  const gamesPanel=document.getElementById('gamesPanel');
-  const calcPanel=document.getElementById('calcPanel');
-  gamesBtn.onclick=()=>gamesPanel.style.display=gamesPanel.style.display?'':'block';
-  calcBtn.onclick=()=>calcPanel.style.display=calcPanel.style.display?'':'block';
+  document.getElementById('gamesBtn').onclick=()=>toggle('gamesPanel');
+  document.getElementById('calcBtn').onclick=()=>toggle('calcPanel');
 
-  fetch('./games.json')
+  function toggle(id){
+    document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+    document.getElementById(id).style.display='block';
+  }
+
+  fetch('./games.json?'+Date.now())
     .then(r=>r.json())
     .then(list=>{
       const gl=document.getElementById('gameList');
@@ -272,26 +318,29 @@ if(isAdmin){
         const d=document.createElement('div');
         d.className='gameItem';
         d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
-        d.onclick=()=>{state.p1.game=g;save()};
-        d.oncontextmenu=e=>{e.preventDefault();state.p2.game=g;save();};
+        d.onclick=()=>{
+          const who=document.getElementById('assignTo').value;
+          state[who].game=g;
+          localStorage.setItem(LS,JSON.stringify(state));
+          render();
+        };
         gl.appendChild(d);
       });
     });
 
   document.getElementById('save').onclick=()=>{
-    state.p1.name=p1NameIn.value||state.p1.name;
-    state.p2.name=p2NameIn.value||state.p2.name;
-    state.spin=parseFloat(spinValue.value)||state.spin;
-    state[who.value].wins[which.value]=parseFloat(win.value)||0;
-    save();
+    state.p1.name=document.getElementById('name1').value||state.p1.name;
+    state.p2.name=document.getElementById('name2').value||state.p2.name;
+    state.buyCost=parseFloat(document.getElementById('buyCost').value)||state.buyCost;
+
+    const p=document.getElementById('who').value;
+    const i=parseInt(document.getElementById('which').value);
+    state[p].wins[i]=parseFloat(document.getElementById('win').value)||0;
+
+    localStorage.setItem(LS,JSON.stringify(state));
+    render();
   };
 }
-
-function save(){
-  localStorage.setItem('tornelios_state',JSON.stringify(state));
-  render();
-}
 </script>
-
 </body>
 </html>
