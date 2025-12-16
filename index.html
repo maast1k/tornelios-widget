@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
 <title>TORNELIOS Widget</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root{
   --bg:#020617;
@@ -21,20 +20,93 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   width:720px;
   background:linear-gradient(180deg,var(--panel),var(--bg));
   border:1px solid var(--border);
-  border-radius:22px;
-  overflow:hidden;
+  border-radius:20px;
   color:var(--text);
-  position:relative;
-  box-shadow:0 0 40px rgba(14,165,255,.25);
+  overflow:hidden;
 }
 
 .header{
-  padding:14px;
   text-align:center;
-  font-weight:1200;
+  padding:14px;
   font-size:22px;
+  font-weight:1200;
   background:linear-gradient(90deg,#021b3a,var(--blue2));
-  text-shadow:0 0 20px rgba(56,189,248,.9);
+  text-shadow:0 0 18px rgba(56,189,248,.9);
+}
+.header span{margin:0 6px}
+
+.games{
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  padding:12px;
+  gap:10px;
+}
+.game{
+  background:#020617;
+  border:1px solid var(--border);
+  border-radius:14px;
+  height:130px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.game img{
+  max-width:90%;
+  max-height:90%;
+  object-fit:contain;
+}
+
+.vs{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:1000;
+  color:var(--blue2);
+}
+
+.players{
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  padding:12px;
+  gap:10px;
+}
+
+.player{
+  background:rgba(7,17,42,.8);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+}
+
+.player h3{
+  text-align:center;
+  margin:0 0 8px;
+}
+
+.buys{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.buy{
+  background:#020617;
+  border:1px solid rgba(56,189,248,.18);
+  border-radius:12px;
+  padding:8px;
+  text-align:center;
+}
+.buy strong{font-size:14px;display:block}
+.buy span{font-size:11px;opacity:.8}
+
+.total{
+  grid-column:1/3;
+  margin-top:6px;
+  text-align:center;
+  font-size:18px;
+  font-weight:1200;
+  text-shadow:0 0 12px rgba(56,189,248,.8);
 }
 
 /* ADMIN */
@@ -54,77 +126,6 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   cursor:pointer;
 }
 
-/* GAMES */
-.gamesRow{
-  display:grid;
-  grid-template-columns:1fr 60px 1fr;
-  gap:10px;
-  padding:12px;
-}
-.gameCard{
-  height:160px;
-  background:#020617;
-  border:1px solid rgba(56,189,248,.3);
-  border-radius:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.gameCard img{
-  max-width:85%;
-  max-height:85%;
-  object-fit:contain;
-}
-.vs{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:1000;
-  color:var(--blue2);
-}
-
-/* PLAYERS */
-.playersRow{
-  display:grid;
-  grid-template-columns:1fr 60px 1fr;
-  gap:10px;
-  padding:12px;
-}
-.player{
-  background:rgba(7,17,42,.75);
-  border:1px solid rgba(56,189,248,.25);
-  border-radius:18px;
-  padding:12px;
-}
-.playerName{
-  text-align:center;
-  font-weight:1100;
-  font-size:16px;
-  margin-bottom:8px;
-}
-.buys{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.buy{
-  background:rgba(2,6,23,.7);
-  border:1px solid rgba(56,189,248,.18);
-  border-radius:12px;
-  padding:8px;
-  text-align:center;
-}
-.buy strong{display:block}
-.buy span{font-size:11px;opacity:.75}
-.total{
-  grid-column:1/3;
-  font-size:18px;
-  font-weight:1200;
-  text-align:center;
-  margin-top:6px;
-}
-
-/* PANELS */
 .panel{
   display:none;
   position:absolute;
@@ -137,8 +138,8 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   padding:12px;
   z-index:50;
 }
-.panel h3{margin:0 0 8px;font-size:13px;color:var(--blue)}
-.panel input,.panel select{
+.panel h4{margin:0 0 8px;color:var(--blue)}
+.panel input, .panel select{
   width:100%;
   margin-bottom:8px;
   padding:8px;
@@ -159,6 +160,8 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
 .gameList{
   max-height:260px;
   overflow:auto;
+  border:1px solid var(--border);
+  border-radius:10px;
 }
 .gameItem{
   display:flex;
@@ -166,30 +169,33 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
   padding:6px;
   cursor:pointer;
 }
-.gameItem img{width:40px;height:24px;object-fit:contain}
+.gameItem img{
+  width:40px;
+  height:24px;
+  object-fit:contain;
+}
 .gameItem:hover{background:rgba(56,189,248,.1)}
 </style>
 </head>
-
 <body>
-<div class="widget">
 
-  <div class="header">🏆 TORNELIOS 🎰</div>
+<div class="widget">
+  <div class="header">🏆 <span>TORNELIOS</span> 🎰</div>
 
   <div class="adminBtns" id="adminBtns">
     <button class="adminBtn" id="gamesBtn">🎰</button>
     <button class="adminBtn" id="calcBtn">🧮</button>
   </div>
 
-  <div class="gamesRow">
-    <div class="gameCard"><img id="g1"></div>
+  <div class="games">
+    <div class="game"><img id="g1"></div>
     <div class="vs">VS</div>
-    <div class="gameCard"><img id="g2"></div>
+    <div class="game"><img id="g2"></div>
   </div>
 
-  <div class="playersRow">
+  <div class="players">
     <div class="player">
-      <div class="playerName" id="p1Name">Player 1</div>
+      <h3 id="p1Name">Player 1</h3>
       <div class="buys">
         <div class="buy"><strong id="p1b1">£0</strong><span id="p1m1">0x</span></div>
         <div class="buy"><strong id="p1b2">£0</strong><span id="p1m2">0x</span></div>
@@ -200,7 +206,7 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
     <div class="vs">VS</div>
 
     <div class="player">
-      <div class="playerName" id="p2Name">Player 2</div>
+      <h3 id="p2Name">Player 2</h3>
       <div class="buys">
         <div class="buy"><strong id="p2b1">£0</strong><span id="p2m1">0x</span></div>
         <div class="buy"><strong id="p2b2">£0</strong><span id="p2m2">0x</span></div>
@@ -209,74 +215,83 @@ body{margin:0;background:transparent;font-family:Inter,system-ui,sans-serif}
     </div>
   </div>
 
-  <!-- ADMIN -->
+  <!-- ADMIN PANELS -->
   <div class="panel" id="gamesPanel">
-    <h3>Games</h3>
+    <h4>Select Game (click assigns to P1, right-click P2)</h4>
     <div class="gameList" id="gameList"></div>
   </div>
 
   <div class="panel" id="calcPanel">
-    <h3>Admin</h3>
-    <input id="name1" placeholder="Player 1 name" />
-    <input id="name2" placeholder="Player 2 name" />
-    <input id="buyCost" type="number" step="0.01" placeholder="Buy cost" />
+    <h4>Admin Controls</h4>
+    <input id="p1NameIn" placeholder="Player 1 name">
+    <input id="p2NameIn" placeholder="Player 2 name">
+    <input id="spinValue" type="number" step="0.01" placeholder="Spin value (e.g. 0.40)">
     <select id="who"><option value="p1">P1</option><option value="p2">P2</option></select>
     <select id="which"><option value="0">Buy 1</option><option value="1">Buy 2</option></select>
-    <input id="win" type="number" step="0.01" placeholder="Win" />
+    <input id="win" type="number" step="0.01" placeholder="Win">
     <button id="save">Save</button>
   </div>
-
 </div>
 
 <script>
-const isAdmin=new URLSearchParams(location.search).has('admin');
-if(isAdmin)document.getElementById('adminBtns').style.display='flex';
+const isAdmin = new URLSearchParams(location.search).has('admin');
+if(isAdmin) document.getElementById('adminBtns').style.display='flex';
 
-let state=JSON.parse(localStorage.getItem('tornelios')||`{
-  "buy":0.2,
-  "p1":{"name":"Player 1","wins":[0,0],"game":null},
-  "p2":{"name":"Player 2","wins":[0,0],"game":null}
-}`);
+let state = JSON.parse(localStorage.getItem('tornelios_state') || JSON.stringify({
+  spin:0.4,
+  p1:{name:'Player 1',wins:[0,0],game:null},
+  p2:{name:'Player 2',wins:[0,0],game:null}
+}));
 
 function render(){
   ['1','2'].forEach(p=>{
     const s=state['p'+p];
     document.getElementById('p'+p+'Name').textContent=s.name;
+    const t=s.wins[0]+s.wins[1];
     document.getElementById('p'+p+'b1').textContent='£'+s.wins[0];
     document.getElementById('p'+p+'b2').textContent='£'+s.wins[1];
-    document.getElementById('p'+p+'m1').textContent=((s.wins[0]/state.buy)||0).toFixed(1)+'x';
-    document.getElementById('p'+p+'m2').textContent=((s.wins[1]/state.buy)||0).toFixed(1)+'x';
-    document.getElementById('p'+p+'t').textContent='£'+(s.wins[0]+s.wins[1]);
-    if(s.game)document.getElementById('g'+p).src=s.game.img;
+    document.getElementById('p'+p+'m1').textContent=(s.wins[0]/state.spin||0).toFixed(1)+'x';
+    document.getElementById('p'+p+'m2').textContent=(s.wins[1]/state.spin||0).toFixed(1)+'x';
+    document.getElementById('p'+p+'t').textContent='£'+t;
+    if(s.game) document.getElementById('g'+p).src=s.game.img;
   });
 }
 render();
 
 if(isAdmin){
+  const gamesPanel=document.getElementById('gamesPanel');
+  const calcPanel=document.getElementById('calcPanel');
   gamesBtn.onclick=()=>gamesPanel.style.display=gamesPanel.style.display?'':'block';
   calcBtn.onclick=()=>calcPanel.style.display=calcPanel.style.display?'':'block';
 
-  fetch('./games.json').then(r=>r.json()).then(list=>{
-    list.forEach(g=>{
-      const d=document.createElement('div');
-      d.className='gameItem';
-      d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
-      d.onclick=()=>{state.p1.game=g;localStorage.setItem('tornelios',JSON.stringify(state));render();};
-      gameList.appendChild(d);
+  fetch('./games.json')
+    .then(r=>r.json())
+    .then(list=>{
+      const gl=document.getElementById('gameList');
+      list.forEach(g=>{
+        const d=document.createElement('div');
+        d.className='gameItem';
+        d.innerHTML=`<img src="${g.img}"><div>${g.name}</div>`;
+        d.onclick=()=>{state.p1.game=g;save()};
+        d.oncontextmenu=e=>{e.preventDefault();state.p2.game=g;save();};
+        gl.appendChild(d);
+      });
     });
-  });
 
-  save.onclick=()=>{
-    state.p1.name=name1.value||state.p1.name;
-    state.p2.name=name2.value||state.p2.name;
-    state.buy=parseFloat(buyCost.value)||state.buy;
-    const p=who.value;
-    const i=parseInt(which.value);
-    state[p].wins[i]=parseFloat(win.value)||0;
-    localStorage.setItem('tornelios',JSON.stringify(state));
-    render();
+  document.getElementById('save').onclick=()=>{
+    state.p1.name=p1NameIn.value||state.p1.name;
+    state.p2.name=p2NameIn.value||state.p2.name;
+    state.spin=parseFloat(spinValue.value)||state.spin;
+    state[who.value].wins[which.value]=parseFloat(win.value)||0;
+    save();
   };
 }
+
+function save(){
+  localStorage.setItem('tornelios_state',JSON.stringify(state));
+  render();
+}
 </script>
+
 </body>
 </html>
